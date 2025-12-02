@@ -40,11 +40,14 @@ Ext.onReady(function () {
         renderTo: 'app-container',
 
         // Padding para separar del borde
-        padding: 0,
+        // padding: 0,
 
-        // Items: aquí va nuestro grid principal
+        // Items: aquí va nuestro grid principal y el menú de navegación
         items: [
+
             {
+                id: 'panelGrids',
+                layout: 'card',
                 xtype: 'panel',
                 layout: 'fit',
                 border: false,
@@ -55,23 +58,62 @@ Ext.onReady(function () {
                     }
                 ],
 
+                // Toolbar para navegación
+                tbar: {
+                    items: [
+
+                        'Administración',
+
+                        {
+                            iconCls: 'fa fa-bars',
+                            menu: {
+                                xtype: 'menu',
+                                plain: true,
+                                items: [
+
+                                    {
+                                        text: 'Usuarios',
+                                        handler: function () {
+
+                                            Ext.getCmp('panelGrids').removeAll(true, true);
+                                            Ext.getCmp('panelGrids').add(Ext.create({
+                                                xtype: 'usergrid'
+                                            }));
+                                        }
+                                    },
+                                    {
+                                        text: 'Perfiles',
+                                        handler: function () {
+
+                                            Ext.getCmp('panelGrids').removeAll(true, true);
+                                            Ext.getCmp('panelGrids').add(Ext.create({
+                                                xtype: 'profilegrid'
+                                            }));
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+
                 // Panel inferior con información didáctica
                 bbar: {
                     xtype: 'toolbar',
                     ui: 'footer',
-                    items: [
-                        {
-                            xtype: 'component',
-                            html: '<div style="padding: 5px;">' +
-                                '<b>💡 Información para Desarrolladores:</b><br/>' +
-                                '<small>' +
-                                '• Abre la <b>Consola de Desarrollo</b> (F12) para ver los logs de cada operación REST<br/>' +
-                                '• Abre la pestaña <b>Network</b> para ver las peticiones HTTP en detalle<br/>' +
-                                '• Revisa el código fuente en <b>app/</b> para entender cómo funciona cada componente' +
-                                '</small>' +
-                                '</div>'
-                        }
-                    ]
+                    // items: [
+                    //     {
+                    //         xtype: 'component',
+                    //         html: '<div style="padding: 5px;">' +
+                    //             '<b>💡 Información para Desarrolladores:</b><br/>' +
+                    //             '<small>' +
+                    //             '• Abre la <b>Consola de Desarrollo</b> (F12) para ver los logs de cada operación REST<br/>' +
+                    //             '• Abre la pestaña <b>Network</b> para ver las peticiones HTTP en detalle<br/>' +
+                    //             '• Revisa el código fuente en <b>app/</b> para entender cómo funciona cada componente' +
+                    //             '</small>' +
+                    //             '</div>'
+                    //     }
+                    // ]
                 }
             }
         ],

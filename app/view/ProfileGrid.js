@@ -9,20 +9,20 @@
  * - Cómo implementar las operaciones CRUD
  */
 
-Ext.define('Tutorial.view.UserGrid', {
+Ext.define('Tutorial.view.ProfileGrid', {
     extend: 'Ext.grid.Panel',
 
-    alias: 'widget.usergrid',
+    alias: 'widget.profilegrid',
 
     // Título del panel
-    title: 'Gestión de Usuarios',
+    title: 'Gestión de Perfiles',
 
     // Configuración del grid
     frame: true,
 
     // Asociar el store
     store: {
-        type: 'users'
+        type: 'profiles'
     },
 
     // Columnas del grid
@@ -40,7 +40,7 @@ Ext.define('Tutorial.view.UserGrid', {
         {
             text: 'Nombre',
             dataIndex: 'nombre',
-            flex: 1,
+            flex: 0.5,
             // Ordenable
             sortable: true,
             // Renderizador con icono
@@ -49,8 +49,13 @@ Ext.define('Tutorial.view.UserGrid', {
             }
         },
         {
-            text: 'Email',
-            dataIndex: 'email',
+            text: 'Descripción',
+            dataIndex: 'descripcion',
+            flex: 1
+        },
+        {
+            text: 'Email de Contacto',
+            dataIndex: 'emailDeContacto',
             flex: 1,
             sortable: true,
             // Renderizador con icono
@@ -59,14 +64,14 @@ Ext.define('Tutorial.view.UserGrid', {
             }
         },
         {
-            text: 'Edad',
-            dataIndex: 'edad',
-            width: 80,
+            text: 'Id Usuario',
+            dataIndex: 'idUsuario',
+            width: 100,
             align: 'center',
             sortable: true,
             // Renderizador con icono
             renderer: function (value) {
-                return '<i class="fa fa-birthday-cake"></i> ' + value;
+                return '<i class="fa fa-user"></i> ' + value;
             }
         },
         {
@@ -77,13 +82,13 @@ Ext.define('Tutorial.view.UserGrid', {
             items: [
                 {
                     iconCls: 'fa fa-edit',
-                    tooltip: 'Editar usuario',
-                    handler: 'onEditUser'
+                    tooltip: 'Editar perfil',
+                    handler: 'onEditProfile'
                 },
                 {
                     iconCls: 'fa fa-trash',
-                    tooltip: 'Eliminar usuario',
-                    handler: 'onDeleteUser',
+                    tooltip: 'Eliminar perfil',
+                    handler: 'onDeleteProfile',
                     // Estilo para el icono de eliminar
                     getClass: function () {
                         return 'fa fa-trash delete-icon';
@@ -96,9 +101,9 @@ Ext.define('Tutorial.view.UserGrid', {
     // Barra de herramientas superior
     tbar: [
         {
-            text: 'Nuevo Usuario',
+            text: 'Nuevo Perfil',
             iconCls: 'fa fa-plus',
-            handler: 'onNewUser',
+            handler: 'onNewProfile',
             // Estilo del botón
             ui: 'default',
             scale: 'medium'
@@ -127,26 +132,26 @@ Ext.define('Tutorial.view.UserGrid', {
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true,
-        displayMsg: 'Mostrando usuarios {0} - {1} de {2}',
-        emptyMsg: 'No hay usuarios para mostrar'
+        displayMsg: 'Mostrando perfiles {0} - {1} de {2}',
+        emptyMsg: 'No hay perfiles para mostrar'
     },
 
     // Listeners
     listeners: {
         // Se ejecuta cuando se hace doble clic en una fila
-        itemdblclick: 'onEditUser'
+        itemdblclick: 'onEditProfile'
     },
 
     // Controller con los métodos de acción
     controller: {
 
         /**
-         * CREAR - Abrir formulario para nuevo usuario
+         * CREAR - Abrir formulario para nuevo perfil
          */
-        onNewUser: function () {
-            console.log('➕ Abriendo formulario para nuevo usuario');
+        onNewProfile: function () {
+            console.log('➕ Abriendo formulario para nuevo perfil');
 
-            var form = Ext.create('Tutorial.view.UserForm', {
+            var form = Ext.create('Tutorial.view.ProfileForm', {
                 isEdit: false
             });
 
@@ -157,12 +162,12 @@ Ext.define('Tutorial.view.UserGrid', {
         },
 
         /**
-         * ACTUALIZAR - Abrir formulario para editar usuario
+         * ACTUALIZAR - Abrir formulario para editar perfil
          */
-        onEditUser: function (grid, record) {
-            console.log('📝 Editando usuario:', record.data);
+        onEditProfile: function (grid, record) {
+            console.log('📝 Editando perfil:', record.data);
 
-            var form = Ext.create('Tutorial.view.UserForm', {
+            var form = Ext.create('Tutorial.view.ProfileForm', {
                 isEdit: true,
                 record: record
             });
@@ -175,12 +180,12 @@ Ext.define('Tutorial.view.UserGrid', {
 
         /**
          * ELIMINAR - Método DELETE
-         * Elimina un usuario del servidor
+         * Elimina un perfil del servidor
          */
-        onDeleteUser: function (grid, rowIndex, colIndex, item, e, record) {
+        onDeleteProfile: function (grid, rowIndex, colIndex, item, e, record) {
             var me = this;
 
-            console.log('🗑️ Solicitando eliminar usuario:', record.data);
+            console.log('🗑️ Solicitando eliminar perfil:', record.data);
 
             // Confirmar eliminación
             Ext.Msg.confirm(
@@ -188,7 +193,7 @@ Ext.define('Tutorial.view.UserGrid', {
                 '¿Está seguro que desea eliminar a <b>' + record.get('nombre') + '</b>?',
                 function (button) {
                     if (button === 'yes') {
-                        me.deleteUser(record);
+                        me.deleteProfile(record);
                     }
                 }
             );
@@ -197,33 +202,33 @@ Ext.define('Tutorial.view.UserGrid', {
         /**
          * Ejecuta la petición DELETE
          */
-        deleteUser: function (record) {
+        deleteProfile: function (record) {
             var me = this,
                 grid = me.getView(),
                 id = record.get('id');
 
-            console.log('📤 DELETE - Eliminando usuario ID:', id);
+            console.log('📤 DELETE - Eliminando perfil ID:', id);
 
             // Mostrar loading
             grid.setLoading('Eliminando...');
 
             // Hacer la petición DELETE
             Ext.Ajax.request({
-                url: 'http://localhost:8080/api/users/' + id,
+                url: 'http://localhost:8080/api/profiles/' + id,
                 method: 'DELETE',
                 success: function (response) {
-                    console.log('✅ Usuario eliminado exitosamente');
+                    console.log('✅ Perfil eliminado exitosamente');
 
                     grid.setLoading(false);
-                    Ext.Msg.alert('Éxito', 'Usuario eliminado correctamente');
+                    Ext.Msg.alert('Éxito', 'Perfil eliminado correctamente');
 
                     // Recargar el grid
                     me.onReload();
                 },
                 failure: function (response) {
-                    console.error('❌ Error al eliminar usuario:', response);
+                    console.error('❌ Error al eliminar perfil:', response);
                     grid.setLoading(false);
-                    Ext.Msg.alert('Error', 'No se pudo eliminar el usuario: ' + response.statusText);
+                    Ext.Msg.alert('Error', 'No se pudo eliminar el perfil: ' + response.statusText);
                 }
             });
         },
@@ -268,15 +273,15 @@ Ext.define('Tutorial.view.UserGrid', {
             store.clearFilter();
 
             if (searchValue) {
-                // Filtrar por nombre o email
+                // Filtrar por nombre o emailDeContacto
                 store.filter([
                     {
                         filterFn: function (record) {
                             var nombre = record.get('nombre').toLowerCase(),
-                                email = record.get('email').toLowerCase(),
+                                emailDeContacto = record.get('emailDeContacto').toLowerCase(),
                                 search = searchValue.toLowerCase();
 
-                            return nombre.indexOf(search) > -1 || email.indexOf(search) > -1;
+                            return nombre.indexOf(search) > -1 || emailDeContacto.indexOf(search) > -1;
                         }
                     }
                 ]);

@@ -36,14 +36,20 @@
             opacity: 0.9;
             font-size: 14px;
         }
+
+        /* Fer que es mostri icones de Font Awesome en accions de row en grids */
+        .x-action-col-icon.fa:before {
+            font-size: 16px; /* sembla que ajustant la mida sí que es mostra */
+            color: black;
+        }
     </style>
 </head>
 
 <body>
-    <div class="app-header">
+    <!-- <div class="app-header">
         <h1>🎓 Tutorial ExtJS - CRUD con REST API</h1>
         <p>Aprende a hacer llamadas a servicios REST con ExtJS</p>
-    </div>
+    </div> -->
 
     <!-- El contenedor de la aplicación se creará aquí -->
     <div id="app-container"></div>
@@ -54,10 +60,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/theme-triton.js"></script>
 
     <!-- 2. Luego nuestra aplicación -->
+
+    <!-- usuarios -->
     <script src="app/model/User.js"></script>
     <script src="app/store/Users.js"></script>
     <script src="app/view/UserGrid.js"></script>
     <script src="app/view/UserForm.js"></script>
+
+    <!-- perfiles -->
+    <script src="app/model/Profile.js"></script>
+    <script src="app/store/Profiles.js"></script>
+    <script src="app/view/ProfileGrid.js"></script>
+    <script src="app/view/ProfileForm.js"></script>
+    
     <script src="app.js"></script>
 </body>
 
