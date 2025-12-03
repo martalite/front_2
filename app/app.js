@@ -9,6 +9,11 @@
  * - La estructura básica de una app ExtJS
  */
 
+if (!localStorage.getItem("loggedIn")) {
+    
+    window.location = '../../';
+}
+
 // Habilitar el modo de desarrollo para ver mensajes detallados en consola
 Ext.Loader.setConfig({
     enabled: true,
@@ -92,6 +97,14 @@ Ext.onReady(function () {
                                         }
                                     }
                                 ]
+                            }
+                        },
+                        {
+                            text: "Cerrar sesión",
+                            handler: function () {
+
+                                localStorage.removeItem("loggedIn");
+                                window.location = '../../';
                             }
                         }
                     ]

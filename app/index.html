@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Inicio de sesión</title>
+    <title>ExtJS CRUD - Tutorial de REST API</title>
 
+    <!-- ExtJS CSS desde cdnjs (público y accesible) -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
 
@@ -38,20 +39,41 @@
 
         /* Fer que es mostri icones de Font Awesome en accions de row en grids */
         .x-action-col-icon.fa:before {
-            font-size: 16px;
-            /* sembla que ajustant la mida sí que es mostra */
+            font-size: 16px; /* sembla que ajustant la mida sí que es mostra */
             color: black;
         }
     </style>
 </head>
 
 <body>
-    <!-- ExtJS desde cdnjs (público y sin restricciones) -->
+    <!-- <div class="app-header">
+        <h1>🎓 Tutorial ExtJS - CRUD con REST API</h1>
+        <p>Aprende a hacer llamadas a servicios REST con ExtJS</p>
+    </div> -->
+
+    <!-- El contenedor de la aplicación se creará aquí -->
+    <div id="app-container"></div>
+
+    <!-- Scripts al final del body para asegurar carga correcta -->
+    <!-- 1. Primero ExtJS desde cdnjs (público y sin restricciones) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/theme-triton.js"></script>
 
-    <script src="./LoginController.js"></script>
-    <script src="./Login.js"></script>
+    <!-- 2. Luego nuestra aplicación -->
+
+    <!-- usuarios -->
+    <script src="model/User.js"></script>
+    <script src="store/Users.js"></script>
+    <script src="view/UserGrid.js"></script>
+    <script src="view/UserForm.js"></script>
+
+    <!-- perfiles -->
+    <script src="model/Profile.js"></script>
+    <script src="store/Profiles.js"></script>
+    <script src="view/ProfileGrid.js"></script>
+    <script src="view/ProfileForm.js"></script>
+    
+    <script src="app.js"></script>
 </body>
 
 </html>
