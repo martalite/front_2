@@ -81,6 +81,44 @@ Ext.define('Tutorial.view.UserForm', {
                     maxValue: 120,
                     blankText: 'La edad es obligatoria',
                     emptyText: 'Ingrese la edad'
+                },
+                {
+                    fieldLabel: 'Creación',
+                    name: 'creacion',
+                    xtype: 'datefield',
+                    format: 'd/m/Y',
+                    allowNull: false
+                },
+                {
+                    fieldLabel: 'Último Login',
+                    name: 'ultimoLogin',
+                    xtype: 'datefield',
+                    format: 'd/m/Y',
+                    allowNull: false
+                },
+                {
+                    fieldLabel: 'Nivel de permiso',
+                    name: 'nivelDePermiso',
+                    type: 'int',
+                    allowNull: false,
+                    xtype: 'numberfield',
+                    minValue: 1,
+                    maxValue: 3,
+                },
+                {
+                    fieldLabel: 'Puntuación',
+                    name: 'puntuacion',
+                    type: 'int',
+                    xtype: 'numberfield',
+                    allowNull: false,
+                    minValue: 1,
+                    maxValue: 10,
+                },
+                {
+                    fieldLabel: 'Descripción',
+                    name: 'descripcion',
+                    type: 'string',
+                    allowNull: true
                 }
             ]
         }];

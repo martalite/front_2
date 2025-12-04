@@ -38,6 +38,31 @@ Ext.define('Tutorial.model.User', {
             name: 'edad',
             type: 'int',
             allowNull: false
+        },
+        {
+            name: 'creacion',
+            type: 'string',
+            allowNull: false
+        },
+        {
+            name: 'ultimoLogin',
+            type: 'string',
+            allowNull: false
+        },
+        {
+            name: 'nivelDePermiso',
+            type: 'int',
+            allowNull: false
+        },
+        {
+            name: 'puntuacion',
+            type: 'int',
+            allowNull: false
+        },
+        {
+            name: 'descripcion',
+            type: 'string',
+            allowNull: true
         }
     ],
 

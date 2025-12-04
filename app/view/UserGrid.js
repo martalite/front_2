@@ -25,6 +25,18 @@ Ext.define('Tutorial.view.UserGrid', {
         type: 'users'
     },
 
+    // El plugin de rowexpander viene por defecto i no hace falta poner required
+    plugins: [{
+        ptype: 'rowexpander',
+        expandOnDblClick: false,
+        rowBodyTpl: new Ext.XTemplate(
+            '<p><b>Creación:</b> {creacion}</p>',
+            '<p><b>Último Login:</b> {ultimoLogin}</p>',
+            '<p><b>Nivel de permiso:</b> {nivelDePermiso}</p>',
+            '<p><b>Puntuación:</b> {puntuacion}</p>'
+        )
+    }],
+
     // Columnas del grid
     columns: [
         {
@@ -57,6 +69,11 @@ Ext.define('Tutorial.view.UserGrid', {
             renderer: function (value) {
                 return '<i class="fa fa-envelope"></i> ' + value;
             }
+        },
+        {
+            text: 'Descripción',
+            dataIndex: 'descripcion',
+            flex: 1
         },
         {
             text: 'Edad',
