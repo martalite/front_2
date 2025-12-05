@@ -34,7 +34,7 @@ Ext.define('Tutorial.view.UserGrid', {
             '<p><b>Último Login:</b> {ultimoLogin}</p>',
             '<p><b>Nivel de permiso:</b> {nivelDePermiso}</p>',
             '<p><b>Puntuación:</b> {puntuacion}</p>'
-        )
+        )        
     }],
 
     // Columnas del grid
@@ -151,7 +151,23 @@ Ext.define('Tutorial.view.UserGrid', {
     // Listeners
     listeners: {
         // Se ejecuta cuando se hace doble clic en una fila
-        itemdblclick: 'onEditUser'
+        itemdblclick: 'onEditUser',
+
+        // // Cuando se expande una row, se guarda para que después se colapse en expandir otra
+        // customToggleRowEvent: function (row, collapsed) {
+
+        //     console.log("entra en el event");
+            
+        //     row.getParent().setDisabled(true);
+
+        //     if (collapsed) {
+
+        //     } else {
+
+
+        //     }
+
+        // }
     },
 
     // Controller con los métodos de acción

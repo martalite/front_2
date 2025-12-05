@@ -52,7 +52,6 @@ Ext.onReady(function () {
 
             {
                 id: 'panelGrids',
-                layout: 'card',
                 xtype: 'panel',
                 layout: 'fit',
                 border: false,
@@ -68,7 +67,7 @@ Ext.onReady(function () {
                     items: [
 
                         'Administración',
-
+                        '-', // Separador
                         {
                             iconCls: 'fa fa-bars',
                             menu: {
@@ -99,6 +98,14 @@ Ext.onReady(function () {
                                 ]
                             }
                         },
+                        {
+                            text: "Perfiles 2",
+                            handler: function () {
+
+                                window.location = 'profiles2/';
+                            }
+                        },
+                        '->',  // Empuja los siguientes items a la derecha
                         {
                             text: "Cerrar sesión",
                             handler: function () {

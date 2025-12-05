@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>ExtJS CRUD - Tutorial de REST API</title>
+
+    <!-- ExtJS CSS desde cdnjs (público y accesible) -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .app-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        /* Fer que es mostri icones de Font Awesome en accions de row en grids */
+        .x-action-col-icon.fa:before {
+            font-size: 16px; /* sembla que ajustant la mida sí que es mostra */
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- El contenedor de la aplicación se creará aquí -->
+    <div id="app-container"></div>
+
+    <!-- Scripts al final del body para asegurar carga correcta -->
+    <!-- 1. Primero ExtJS desde cdnjs (público y sin restricciones) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/theme-triton.js"></script>
+
+    <!-- 2. Luego nuestra aplicación -->
+
+    <script src="../model/Profile.js"></script>
+    <script src="../store/Profiles.js"></script>
+    <script src="profiles/NoProfileSelected.js"></script>
+    <script src="profiles/Profiles.js"></script>
+    <script src="profiles/ProfilesController.js"></script>
+    <script src="profiles/DetailProfile.js"></script>
+    
+    <script src="app.js"></script>
+</body>
+
+</html>
