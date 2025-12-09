@@ -104,8 +104,16 @@ Ext.define('profiles.Profile', {
         },
 
         {
-            // TODO: rehacer
-            columnWidth: 0.6,
+
+            columnWidth: 0.05,
+            height: '100%',
+            xtype: 'container',
+            html: '<div class=divider style=height:60vh;>&nbsp</div>',
+        },
+
+        {
+            
+            columnWidth: 0.55,
             margin: 10,
             id: 'rightColumn',
             xtype: 'container',

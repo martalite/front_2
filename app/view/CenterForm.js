@@ -9,13 +9,13 @@
  * - Cómo guardar datos en el servidor (POST/PUT)
  */
 
-Ext.define('Tutorial.view.UserForm', {
+Ext.define('Tutorial.view.CenterForm', {
     extend: 'Ext.window.Window',
 
-    alias: 'widget.userform',
+    alias: 'widget.centerform',
 
     // Configuración de la ventana
-    title: 'Nuevo Usuario',
+    title: 'Nuevo Perfil',
     modal: true,
     width: 400,
     layout: 'fit',
@@ -35,13 +35,13 @@ Ext.define('Tutorial.view.UserForm', {
 
         // Si estamos editando, cambiar el título
         if (me.isEdit) {
-            me.title = 'Editar Usuario';
+            me.title = 'Editar Perfil';
         }
 
         // Definir los items (el formulario)
         me.items = [{
             xtype: 'form',
-            reference: 'userForm',
+            reference: 'profileForm',
             bodyPadding: 20,
             defaults: {
                 xtype: 'textfield',
@@ -65,77 +65,25 @@ Ext.define('Tutorial.view.UserForm', {
                     emptyText: 'Ingrese el nombre completo'
                 },
                 {
-                    fieldLabel: 'Email',
-                    name: 'email',
+                    fieldLabel: 'Descripción',
+                    name: 'descripcion',
+                    allowBlank: true,
+                },
+                {
+                    fieldLabel: 'Email de contacto',
+                    name: 'emailDeContacto',
                     vtype: 'email',
                     allowBlank: false,
                     blankText: 'El email es obligatorio',
                     emptyText: 'ejemplo@email.com'
                 },
                 {
-                    fieldLabel: 'Edad',
-                    name: 'edad',
+                    fieldLabel: 'Id de Usuario',
+                    name: 'idUsuario',
                     xtype: 'numberfield',
                     allowBlank: false,
-                    minValue: 1,
-                    maxValue: 120,
-                    blankText: 'La edad es obligatoria',
-                    emptyText: 'Ingrese la edad'
-                },
-                {
-                    fieldLabel: 'Creación',
-                    name: 'creacion',
-                    xtype: 'datefield',
-                    format: 'd/m/Y',
-                    allowBlank: false,
-                },
-                {
-                    fieldLabel: 'Último Login',
-                    name: 'ultimoLogin',
-                    xtype: 'datefield',
-                    format: 'd/m/Y',
-                    allowBlank: false,
-                },
-                {
-                    fieldLabel: 'Rol',
-                    name: 'rol',
-
-                    xtype: 'combo',
-
-                    store: [
-                        "Admin",
-                        "Usuario",
-                        "Solo lectura"
-                    ],
-
-                    queryMode: 'local',
-                    // valueField: 'code',
-                    editable: false,
-                    allowBlank: false
-                },
-                {
-                    fieldLabel: 'Nivel de permiso',
-                    name: 'nivelDePermiso',
-                    type: 'int',
-                    allowBlank: false,
-                    xtype: 'numberfield',
-                    minValue: 1,
-                    maxValue: 3
-                },
-                {
-                    fieldLabel: 'Puntuación',
-                    name: 'puntuacion',
-                    type: 'int',
-                    xtype: 'numberfield',
-                    allowBlank: false,
-                    minValue: 1,
-                    maxValue: 10
-                },
-                {
-                    fieldLabel: 'Descripción',
-                    name: 'descripcion',
-                    type: 'string',
-                    allowBlank: true
+                    blankText: 'El id de usuario es obligatorio',
+                    emptyText: 'Ingrese id de usuario'
                 }
             ]
         }];
@@ -154,7 +102,7 @@ Ext.define('Tutorial.view.UserForm', {
                 iconCls: 'fa fa-save',
                 formBind: true, // Solo se habilita si el formulario es válido
                 handler: function () {
-                    me.saveUser();
+                    me.saveProfile();
                 }
             }
         ];
@@ -169,10 +117,10 @@ Ext.define('Tutorial.view.UserForm', {
     },
 
     /**
-     * Método para guardar el usuario
+     * Método para guardar el perfil
      * Hace una llamada POST (crear) o PUT (actualizar)
      */
-    saveUser: function () {
+    saveProfile: function () {
         var me = this,
             form = me.down('form').getForm();
 
@@ -189,26 +137,26 @@ Ext.define('Tutorial.view.UserForm', {
         me.setLoading('Guardando...');
 
         if (me.isEdit) {
-            // ACTUALIZAR usuario existente (PUT)
-            me.updateUser(values);
+            // ACTUALIZAR perfil existente (PUT)
+            me.updateProfile(values);
         } else {
-            // CREAR nuevo usuario (POST)
-            me.createUser(values);
+            // CREAR nuevo perfil (POST)
+            me.createProfile(values);
         }
     },
 
     /**
      * CREAR - Método POST
-     * Crea un nuevo usuario en el servidor
+     * Crea un nuevo perfil en el servidor
      */
-    createUser: function (values) {
+    createProfile: function (values) {
         var me = this;
 
-        console.log('📤 POST - Creando nuevo usuario:', values);
+        console.log('📤 POST - Creando nuevo perfil:', values);
 
         // Hacer la petición POST
         Ext.Ajax.request({
-            url: 'http://localhost:8080/api/users',
+            url: 'http://localhost:8080/api/profiles',
             method: 'POST',
             jsonData: values,
             headers: {
@@ -216,36 +164,36 @@ Ext.define('Tutorial.view.UserForm', {
             },
             success: function (response) {
                 var result = Ext.decode(response.responseText);
-                console.log('✅ Usuario creado exitosamente:', result);
+                console.log('✅ Perfil creado exitosamente:', result);
 
                 me.setLoading(false);
-                Ext.Msg.alert('Éxito', 'Usuario creado correctamente', function () {
+                Ext.Msg.alert('Éxito', 'Perfil creado correctamente', function () {
                     // Recargar el grid
-                    me.fireEvent('usersaved');
+                    me.fireEvent('profilesaved');
                     me.close();
                 });
             },
             failure: function (response) {
-                console.error('❌ Error al crear usuario:', response);
+                console.error('❌ Error al crear perfil:', response);
                 me.setLoading(false);
-                Ext.Msg.alert('Error', 'No se pudo crear el usuario: ' + response.statusText);
+                Ext.Msg.alert('Error', 'No se pudo crear el perfil: ' + response.statusText);
             }
         });
     },
 
     /**
      * ACTUALIZAR - Método PUT
-     * Actualiza un usuario existente en el servidor
+     * Actualiza un perfil existente en el servidor
      */
-    updateUser: function (values) {
+    updateProfile: function (values) {
         var me = this,
             id = me.record.get('id');
 
-        console.log('📤 PUT - Actualizando usuario ID:', id, values);
+        console.log('📤 PUT - Actualizando perfil ID:', id, values);
 
         // Hacer la petición PUT
         Ext.Ajax.request({
-            url: 'http://localhost:8080/api/users/' + id,
+            url: 'http://localhost:8080/api/profiles/' + id,
             method: 'PUT',
             jsonData: values,
             headers: {
@@ -253,19 +201,19 @@ Ext.define('Tutorial.view.UserForm', {
             },
             success: function (response) {
                 var result = Ext.decode(response.responseText);
-                console.log('✅ Usuario actualizado exitosamente:', result);
+                console.log('✅ Perfil actualizado exitosamente:', result);
 
                 me.setLoading(false);
-                Ext.Msg.alert('Éxito', 'Usuario actualizado correctamente', function () {
+                Ext.Msg.alert('Éxito', 'Perfil actualizado correctamente', function () {
                     // Recargar el grid
-                    me.fireEvent('usersaved');
+                    me.fireEvent('profilesaved');
                     me.close();
                 });
             },
             failure: function (response) {
-                console.error('❌ Error al actualizar usuario:', response);
+                console.error('❌ Error al actualizar perfil:', response);
                 me.setLoading(false);
-                Ext.Msg.alert('Error', 'No se pudo actualizar el usuario: ' + response.statusText);
+                Ext.Msg.alert('Error', 'No se pudo actualizar el perfil: ' + response.statusText);
             }
         });
     }

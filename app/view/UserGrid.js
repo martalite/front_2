@@ -29,12 +29,16 @@ Ext.define('Tutorial.view.UserGrid', {
     plugins: [{
         ptype: 'rowexpander',
         expandOnDblClick: false,
-        rowBodyTpl: new Ext.XTemplate(
-            '<p><b>Creación:</b> {creacion}</p>',
-            '<p><b>Último Login:</b> {ultimoLogin}</p>',
-            '<p><b>Nivel de permiso:</b> {nivelDePermiso}</p>',
-            '<p><b>Puntuación:</b> {puntuacion}</p>'
-        )        
+        // rowBodyTpl: ['<div id="row-expander-box-{id}">{nombre}</div>']
+        rowBodyTpl: '<div id="expander-content"></div>'
+        // rowBodyTpl: new Ext.XTemplate(
+        //     '<p><b>Creación:</b> {creacion}</p>',
+        //     '<p><b>Último Login:</b> {ultimoLogin}</p>',
+        //     '<p><b>Rol:</b> {rol}</p>',
+        //     '<p><b>Nivel de permiso:</b> {nivelDePermiso}</p>',
+        //     '<p><b>Puntuación:</b> {puntuacion}</p>',
+        //     '<button class="custom-button" onClick={onEditUserCenters()}>Gestionar centros</button>'
+        // )
     }],
 
     // Columnas del grid
@@ -148,26 +152,87 @@ Ext.define('Tutorial.view.UserGrid', {
         emptyMsg: 'No hay usuarios para mostrar'
     },
 
+    itemConfig:
+    {
+        body: {
+            xtype: 'formpanel',
+            name: 'editCenterForm',
+            margin: 0,
+            padding: 0
+        }
+    },
+
     // Listeners
     listeners: {
         // Se ejecuta cuando se hace doble clic en una fila
         itemdblclick: 'onEditUser',
 
-        // // Cuando se expande una row, se guarda para que después se colapse en expandir otra
-        // customToggleRowEvent: function (row, collapsed) {
+        afterrender: function (grid) {
 
-        //     console.log("entra en el event");
-            
-        //     row.getParent().setDisabled(true);
+            grid.view.on('expandbody', function (rowNode, record, expandRowNode) {
+                
+                console.log("expand");
 
-        //     if (collapsed) {
+                console.log("rowNode: ", rowNode);
+                console.log("record: ", record);
 
-        //     } else {
+                console.log("expandRowNode: ", expandRowNode);
 
 
-        //     }
+                // var test = expandRowNode.getBody();
+                // console.log(test);
 
-        // }
+                // console.log(rowNode.getBody())
+
+                // var divv = Ext.get('row-expander-box-' + record.data.id);
+
+                // console.log(divv);
+                
+                console.log(Ext.get('expander-content'));
+                
+                
+                // divv.setHTML('Content that I cannot see');	
+
+                // console.log(divv.getBody());
+                
+                Ext.create('Ext.panel.Panel', {
+                    renderTo: Ext.get('expander-content'),
+                    layout: 'vbox',
+                    border: false,
+                    items: [
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Creación',
+                            value: record.get('creacion')
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Último Login',
+                            value: record.get('ultimoLogin')
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Rol',
+                            value: record.get('rol')
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Nivel de permiso',
+                            value: record.get('nivelDePermiso')
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Puntuación',
+                            value: record.get('puntuacion')
+                        }
+                    ]
+                });
+
+
+
+
+            });
+        }
     },
 
     // Controller con los métodos de acción
@@ -204,6 +269,23 @@ Ext.define('Tutorial.view.UserGrid', {
             form.on('usersaved', this.onReload, this);
 
             form.show();
+        },
+
+        /**
+         * ACTUALIZAR - Abrir formulario para editar los centros de un usuario
+         */
+        onEditUserCenters: function () {
+            console.log('Editando centros del usuario');
+
+            // var form = Ext.create('Tutorial.view.UserForm', {
+            //     isEdit: true,
+            //     record: record
+            // });
+
+            // // Escuchar el evento de guardado
+            // form.on('usersaved', this.onReload, this);
+
+            // form.show();
         },
 
         /**

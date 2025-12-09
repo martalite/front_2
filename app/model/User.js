@@ -50,6 +50,11 @@ Ext.define('Tutorial.model.User', {
             allowNull: false
         },
         {
+            name: 'rol',
+            type: 'string',
+            allowNull: false
+        },
+        {
             name: 'nivelDePermiso',
             type: 'int',
             allowNull: false

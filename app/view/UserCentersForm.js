@@ -9,13 +9,13 @@
  * - Cómo guardar datos en el servidor (POST/PUT)
  */
 
-Ext.define('Tutorial.view.UserForm', {
+Ext.define('Tutorial.view.UserCentersForm', {
     extend: 'Ext.window.Window',
 
-    alias: 'widget.userform',
+    alias: 'widget.usercentersform',
 
     // Configuración de la ventana
-    title: 'Nuevo Usuario',
+    title: 'Gestionar centros',
     modal: true,
     width: 400,
     layout: 'fit',

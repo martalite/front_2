@@ -94,6 +94,16 @@ Ext.onReady(function () {
                                                 xtype: 'profilegrid'
                                             }));
                                         }
+                                    },
+                                    {
+                                        text: 'Centros',
+                                        handler: function () {
+
+                                            Ext.getCmp('panelGrids').removeAll(true, true);
+                                            Ext.getCmp('panelGrids').add(Ext.create({
+                                                xtype: 'centergrid'
+                                            }));
+                                        }
                                     }
                                 ]
                             }
