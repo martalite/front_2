@@ -30,7 +30,7 @@ Ext.define('Tutorial.view.UserGrid', {
         ptype: 'rowexpander',
         expandOnDblClick: false,
         // rowBodyTpl: ['<div id="row-expander-box-{id}">{nombre}</div>']
-        rowBodyTpl: '<div id="expander-content"></div>'
+        rowBodyTpl: '<div id="expander-content-{id}"></div>'
         // rowBodyTpl: new Ext.XTemplate(
         //     '<p><b>Creación:</b> {creacion}</p>',
         //     '<p><b>Último Login:</b> {ultimoLogin}</p>',
@@ -169,34 +169,16 @@ Ext.define('Tutorial.view.UserGrid', {
 
         afterrender: function (grid) {
 
+            // Siempre se crea un panel dentro del div con id del record en expandir
             grid.view.on('expandbody', function (rowNode, record, expandRowNode) {
-                
-                console.log("expand");
 
-                console.log("rowNode: ", rowNode);
-                console.log("record: ", record);
+                // console.log("expand");
+                // console.log("record: ", record);
+                // console.log("id a buscar: ", ('expander-content-' + record.get('id')));
 
-                console.log("expandRowNode: ", expandRowNode);
-
-
-                // var test = expandRowNode.getBody();
-                // console.log(test);
-
-                // console.log(rowNode.getBody())
-
-                // var divv = Ext.get('row-expander-box-' + record.data.id);
-
-                // console.log(divv);
-                
-                console.log(Ext.get('expander-content'));
-                
-                
-                // divv.setHTML('Content that I cannot see');	
-
-                // console.log(divv.getBody());
-                
                 Ext.create('Ext.panel.Panel', {
-                    renderTo: Ext.get('expander-content'),
+                    id: ('expander-panel-' + record.get('id')),
+                    renderTo: Ext.get('expander-content-' + record.get('id')),
                     layout: 'vbox',
                     border: false,
                     items: [
@@ -224,13 +206,40 @@ Ext.define('Tutorial.view.UserGrid', {
                             xtype: 'displayfield',
                             fieldLabel: 'Puntuación',
                             value: record.get('puntuacion')
+                        },
+                        {
+                            // Button para ir a gestionar centros del usuario
+                            xtype: 'button',
+                            text: 'Gestionar centros',
+                            handler: function () {
+                                console.log('Editando centros del usuario');
+
+                                var form = Ext.create('Tutorial.view.UserCenterForm', {
+                                    
+                                    record: record
+                                });
+
+                                // Escuchar el evento de guardado
+                                form.on('usersaved', this.onReload, this);
+
+                                form.show();
+                            }
                         }
                     ]
                 });
+            });
 
+            // Siempre se elimina el panel del div con id en colapsar
+            grid.view.on('collapsebody', function (rowNode, record, expandRowNode) {
 
+                // Hacer destroy en el panel
+                var panel = Ext.getCmp(('expander-panel-' + record.get('id')))
 
+                if (panel) {
 
+                    panel.destroy();
+                    console.log('boom');
+                }
             });
         }
     },
@@ -269,23 +278,6 @@ Ext.define('Tutorial.view.UserGrid', {
             form.on('usersaved', this.onReload, this);
 
             form.show();
-        },
-
-        /**
-         * ACTUALIZAR - Abrir formulario para editar los centros de un usuario
-         */
-        onEditUserCenters: function () {
-            console.log('Editando centros del usuario');
-
-            // var form = Ext.create('Tutorial.view.UserForm', {
-            //     isEdit: true,
-            //     record: record
-            // });
-
-            // // Escuchar el evento de guardado
-            // form.on('usersaved', this.onReload, this);
-
-            // form.show();
         },
 
         /**

@@ -1,21 +1,10 @@
-/**
- * FORMULARIO DE USUARIO
- * 
- * Este formulario permite crear y editar usuarios.
- * 
- * Aprenderás:
- * - Cómo crear formularios en ExtJS
- * - Validación de campos
- * - Cómo guardar datos en el servidor (POST/PUT)
- */
-
 Ext.define('Tutorial.view.CenterForm', {
     extend: 'Ext.window.Window',
 
     alias: 'widget.centerform',
 
     // Configuración de la ventana
-    title: 'Nuevo Perfil',
+    title: 'Nuevo Centro',
     modal: true,
     width: 400,
     layout: 'fit',
@@ -35,13 +24,13 @@ Ext.define('Tutorial.view.CenterForm', {
 
         // Si estamos editando, cambiar el título
         if (me.isEdit) {
-            me.title = 'Editar Perfil';
+            me.title = 'Editar Centro';
         }
 
         // Definir los items (el formulario)
         me.items = [{
             xtype: 'form',
-            reference: 'profileForm',
+            reference: 'centerForm',
             bodyPadding: 20,
             defaults: {
                 xtype: 'textfield',
@@ -68,22 +57,6 @@ Ext.define('Tutorial.view.CenterForm', {
                     fieldLabel: 'Descripción',
                     name: 'descripcion',
                     allowBlank: true,
-                },
-                {
-                    fieldLabel: 'Email de contacto',
-                    name: 'emailDeContacto',
-                    vtype: 'email',
-                    allowBlank: false,
-                    blankText: 'El email es obligatorio',
-                    emptyText: 'ejemplo@email.com'
-                },
-                {
-                    fieldLabel: 'Id de Usuario',
-                    name: 'idUsuario',
-                    xtype: 'numberfield',
-                    allowBlank: false,
-                    blankText: 'El id de usuario es obligatorio',
-                    emptyText: 'Ingrese id de usuario'
                 }
             ]
         }];
@@ -102,7 +75,7 @@ Ext.define('Tutorial.view.CenterForm', {
                 iconCls: 'fa fa-save',
                 formBind: true, // Solo se habilita si el formulario es válido
                 handler: function () {
-                    me.saveProfile();
+                    me.saveCenter();
                 }
             }
         ];
@@ -117,10 +90,10 @@ Ext.define('Tutorial.view.CenterForm', {
     },
 
     /**
-     * Método para guardar el perfil
+     * Método para guardar el centro
      * Hace una llamada POST (crear) o PUT (actualizar)
      */
-    saveProfile: function () {
+    saveCenter: function () {
         var me = this,
             form = me.down('form').getForm();
 
@@ -137,26 +110,26 @@ Ext.define('Tutorial.view.CenterForm', {
         me.setLoading('Guardando...');
 
         if (me.isEdit) {
-            // ACTUALIZAR perfil existente (PUT)
-            me.updateProfile(values);
+            // ACTUALIZAR centro existente (PUT)
+            me.updateCenter(values);
         } else {
-            // CREAR nuevo perfil (POST)
-            me.createProfile(values);
+            // CREAR nuevo centro (POST)
+            me.createCenter(values);
         }
     },
 
     /**
      * CREAR - Método POST
-     * Crea un nuevo perfil en el servidor
+     * Crea un nuevo centro en el servidor
      */
-    createProfile: function (values) {
+    createCenter: function (values) {
         var me = this;
 
-        console.log('📤 POST - Creando nuevo perfil:', values);
+        console.log('📤 POST - Creando nuevo centro:', values);
 
         // Hacer la petición POST
         Ext.Ajax.request({
-            url: 'http://localhost:8080/api/profiles',
+            url: 'http://localhost:8080/api/centers',
             method: 'POST',
             jsonData: values,
             headers: {
@@ -164,36 +137,36 @@ Ext.define('Tutorial.view.CenterForm', {
             },
             success: function (response) {
                 var result = Ext.decode(response.responseText);
-                console.log('✅ Perfil creado exitosamente:', result);
+                console.log('✅ Centro creado exitosamente:', result);
 
                 me.setLoading(false);
-                Ext.Msg.alert('Éxito', 'Perfil creado correctamente', function () {
+                Ext.Msg.alert('Éxito', 'Centro creado correctamente', function () {
                     // Recargar el grid
-                    me.fireEvent('profilesaved');
+                    me.fireEvent('centersaved');
                     me.close();
                 });
             },
             failure: function (response) {
-                console.error('❌ Error al crear perfil:', response);
+                console.error('❌ Error al crear centro:', response);
                 me.setLoading(false);
-                Ext.Msg.alert('Error', 'No se pudo crear el perfil: ' + response.statusText);
+                Ext.Msg.alert('Error', 'No se pudo crear el centro: ' + response.statusText);
             }
         });
     },
 
     /**
      * ACTUALIZAR - Método PUT
-     * Actualiza un perfil existente en el servidor
+     * Actualiza un centro existente en el servidor
      */
-    updateProfile: function (values) {
+    updateCenter: function (values) {
         var me = this,
             id = me.record.get('id');
 
-        console.log('📤 PUT - Actualizando perfil ID:', id, values);
+        console.log('📤 PUT - Actualizando centro ID:', id, values);
 
         // Hacer la petición PUT
         Ext.Ajax.request({
-            url: 'http://localhost:8080/api/profiles/' + id,
+            url: 'http://localhost:8080/api/centers/' + id,
             method: 'PUT',
             jsonData: values,
             headers: {
@@ -201,19 +174,19 @@ Ext.define('Tutorial.view.CenterForm', {
             },
             success: function (response) {
                 var result = Ext.decode(response.responseText);
-                console.log('✅ Perfil actualizado exitosamente:', result);
+                console.log('✅ Centro actualizado exitosamente:', result);
 
                 me.setLoading(false);
-                Ext.Msg.alert('Éxito', 'Perfil actualizado correctamente', function () {
+                Ext.Msg.alert('Éxito', 'Centro actualizado correctamente', function () {
                     // Recargar el grid
-                    me.fireEvent('profilesaved');
+                    me.fireEvent('centersaved');
                     me.close();
                 });
             },
             failure: function (response) {
-                console.error('❌ Error al actualizar perfil:', response);
+                console.error('❌ Error al actualizar centro:', response);
                 me.setLoading(false);
-                Ext.Msg.alert('Error', 'No se pudo actualizar el perfil: ' + response.statusText);
+                Ext.Msg.alert('Error', 'No se pudo actualizar el centro: ' + response.statusText);
             }
         });
     }

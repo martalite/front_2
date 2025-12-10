@@ -1,14 +1,3 @@
-/**
- * GRID DE USUARIOS
- * 
- * El grid es una tabla que muestra los datos y permite interactuar con ellos.
- * 
- * Aprenderás:
- * - Cómo crear un grid en ExtJS
- * - Cómo conectar el grid con el store
- * - Cómo implementar las operaciones CRUD
- */
-
 Ext.define('Tutorial.view.CenterGrid', {
     extend: 'Ext.grid.Panel',
 
@@ -22,7 +11,7 @@ Ext.define('Tutorial.view.CenterGrid', {
 
     // Asociar el store
     store: {
-        type: 'profiles'
+        type: 'centers'
     },
 
     // Columnas del grid
@@ -135,7 +124,7 @@ Ext.define('Tutorial.view.CenterGrid', {
             });
 
             // Escuchar el evento de guardado
-            form.on('usersaved', this.onReload, this);
+            form.on('centersaved', this.onReload, this);
 
             form.show();
         },
@@ -146,13 +135,13 @@ Ext.define('Tutorial.view.CenterGrid', {
         onEditCenter: function (grid, record) {
             console.log('📝 Editando centro:', record.data);
 
-            var form = Ext.create('Tutorial.view.ProfileForm', {
+            var form = Ext.create('Tutorial.view.CenterForm', {
                 isEdit: true,
                 record: record
             });
 
             // Escuchar el evento de guardado
-            form.on('usersaved', this.onReload, this);
+            form.on('centersaved', this.onReload, this);
 
             form.show();
         },

@@ -156,7 +156,7 @@ Ext.define('Tutorial.view.ProfileGrid', {
             });
 
             // Escuchar el evento de guardado
-            form.on('usersaved', this.onReload, this);
+            form.on('profilesaved', this.onReload, this);
 
             form.show();
         },
@@ -173,7 +173,7 @@ Ext.define('Tutorial.view.ProfileGrid', {
             });
 
             // Escuchar el evento de guardado
-            form.on('usersaved', this.onReload, this);
+            form.on('profilesaved', this.onReload, this);
 
             form.show();
         },
