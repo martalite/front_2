@@ -6,11 +6,9 @@ Ext.define('Tutorial.view.UserCenterForm', {
     // Configuración de la ventana
     title: 'Gestión de centros asignados',
     modal: true,
-    width: 800,
-    layout: 'column',
-
-    // Iconos
-    iconCls: 'fa fa-user',
+    width: 1200,
+    height: 600,
+    layout: 'fit',
 
     record: null,
 
@@ -20,58 +18,154 @@ Ext.define('Tutorial.view.UserCenterForm', {
     initComponent: function () {
         var me = this;
 
-        // Obtener los centros del usuario (por su id) i obtener los centros disponibles
+        console.log(me.record);
 
-        me.record.get('id')
+        // var userCentersStore = Ext.getStore('UsersCenters');
 
-        // Eliminar de los centros disponibles los centros del usuario
+        var centersStore = Ext.create('Tutorial.store.Centers')
 
-        // Definir los items (el formulario)
+        var userCentersStore = Ext.create('Tutorial.store.UsersCenters');
+
+        console.log("store: ", userCentersStore);
+
+        // Filtrar el grid de centros en modificar el grid 2 para quitar los centros que ya tiene el usuario.
+        // Solo cuando se hayan cargado los centros
+        centersStore.on('load', function () {
+
+            userCentersStore.on('datachanged', function () {
+
+                // Obtener ids de los centros que tiene el usuario
+                var selectedIds = userCentersStore.collect('idCentro');
+
+                console.log(selectedIds);
+
+
+                centersStore.clearFilter();
+
+                // Filtrar de centros disponibles
+                centersStore.filterBy(function (record) {
+
+                    console.log("record: ", record.get('id'));
+
+                    // console.log(centersStore.get("id"));
+
+
+                    var filtered = selectedIds.indexOf(record.get('id')) === -1;
+
+                    console.log("filtrar: ", filtered);
+                    return filtered
+                });
+
+                console.log("count: ", centersStore.getCount());
+
+                // Resfrescar el grid 1 (NO HACE FALTA?)
+                // var grid = Ext.getCmp('centersGrid');
+                // console.log("grid: ", grid);
+                // grid.getView().refresh();
+            });
+        });
+
+        // Cargar todos los centros del usuario seleccionado
+        userCentersStore.load({
+            params: {
+                idUsuario: me.record.get('id')
+            },
+        });
+
+        // Definir los items
         me.items = [
 
             {
-                store: {
-                    type: 'userscenters'
-                },
-                xtype: 'grid',
-                // reference: 'centerForm',
-                bodyPadding: 20,
-                // defaults: {
-                //     xtype: 'textfield',
-                //     anchor: '100%',
-                //     labelWidth: 80,
-                //     margin: '0 0 15 0'
-                // },
-                columns: [
-                    {
-                        text: 'ID',
-                        dataIndex: 'idUsuario',
-                        width: 60,
-                        align: 'center',
-                        // // Renderizador personalizado para dar estilo
-                        // renderer: function (value) {
-                        //     return '<span style="font-weight: bold; color: #667eea;">#' + value + '</span>';
-                        // }
-                    },
-                ]
-            },
-            {
-                xtype: 'grid',
-                // reference: 'centerForm',
-                bodyPadding: 20,
-                // defaults: {
-                //     xtype: 'textfield',
-                //     anchor: '100%',
-                //     labelWidth: 80,
-                //     margin: '0 0 15 0'
-                // },
+                xtype: 'container',
+                // layout: 'hbox',
+                // width: 900,
+                // height: 400,
+
                 items: [
+
                     {
-                        xtype: 'displayfield',
-                        fieldLabel: 'ID Usuario',
-                        name: 'id',
-                        value: "aasasas"
+                        store: centersStore,
+
+                        xtype: 'grid',
+                        id: 'centersGrid',
+                        title: 'Centros disponibles',
+                        height: 200,
+                        selModel: null, // de momento que no se seeleccione
+
+                        columns: [
+                            {
+                                text: 'ID Centro',
+                                dataIndex: 'id',
+                                flex: 1,
+                                align: 'center',
+
+                            },
+                            {
+                                text: 'Nombre',
+                                dataIndex: 'nombre',
+                                flex: 1,
+                                align: 'center',
+
+                            }
+                        ],
+
+
+                        listeners: {
+                            itemdblclick: function (grid, record) {
+
+                                // creamos un nuevo record para el grid 2 (como que son tablas difrentes se tiene que mapear un poco)
+                                var newRecord = Ext.create(userCentersStore.getModel(), {
+                                    idCentro: record.get('id'),
+                                    userId: me.record.get('id') // el id del usuario actual
+                                });
+
+                                console.log("nuevo record a poner en grid 2: ", newRecord);
+
+                                userCentersStore.add(newRecord);
+                            }
+                        }
+
+
+                    },
+                    {
+                        store: userCentersStore,
+                        xtype: 'grid',
+                        title: 'Centros assignados',
+                        height: 200,
+                        selModel: null, // de momento que no se seeleccione
+
+                        columns: [
+                            {
+                                text: 'ID Centro',
+                                dataIndex: 'idCentro',
+                                flex: 1,
+                                align: 'center',
+                            },
+                            {
+                                text: 'Nombre',
+                                dataIndex: 'idCentro',
+                                flex: 1,
+                                align: 'center',
+
+                                // render custom para mostrar el nombre del centro de la otra tabla
+                                renderer: function (value) {
+                                    var center = centersStore.getById(value);
+                                    return center ? center.get('nombre') : '';
+                                }
+                            }
+
+                        ],
+
+                        listeners: {
+
+                            itemdblclick: function(grid, record) {
+
+                                // Simplemente eliminar del segundo grid i el filter de antes se encarga de que vuelva  a salir arriba
+                                userCentersStore.remove(record);
+                            }
+                        }
                     }
+
                 ]
             }
         ];

@@ -5,6 +5,8 @@ Ext.define('Tutorial.store.UsersCenters', {
 
     model: 'Tutorial.model.UserCenter',
 
+    storeId: 'UsersCenters',
+
     // Número de registros por página (para paginación)
     pageSize: 25,
 
@@ -22,7 +24,7 @@ Ext.define('Tutorial.store.UsersCenters', {
             create: 'http://localhost:8080/api/usersCenters',
 
             // GET - Leer todos los centros
-            read: 'http://localhost:8080/api/usersCenters/all',
+            read: 'http://localhost:8080/api/usersCenters/search',
 
             // // PUT - Actualizar centro existente
             // update: 'http://localhost:8080/api/usersCenters',
@@ -76,7 +78,7 @@ Ext.define('Tutorial.store.UsersCenters', {
         // Se ejecuta después de cargar los datos
         load: function (store, records, successful) {
             if (successful) {
-                console.log('✅ Datos cargados correctamente:', records.length, 'centros');
+                console.log('✅ Datos cargados correctamente:', records.length, 'usuarios centros');
             } else {
                 console.error('❌ Error al cargar los datos');
             }

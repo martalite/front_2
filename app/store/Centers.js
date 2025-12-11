@@ -15,6 +15,8 @@ Ext.define('Tutorial.store.Centers', {
 
     alias: 'store.centers',
 
+    storeId: 'Centers',
+
     model: 'Tutorial.model.Center',
 
     // Número de registros por página (para paginación)
