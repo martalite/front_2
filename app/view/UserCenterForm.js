@@ -20,8 +20,6 @@ Ext.define('Tutorial.view.UserCenterForm', {
 
         console.log(me.record);
 
-        // var userCentersStore = Ext.getStore('UsersCenters');
-
         var centersStore = Ext.create('Tutorial.store.Centers')
 
         var userCentersStore = Ext.create('Tutorial.store.UsersCenters');
@@ -49,7 +47,7 @@ Ext.define('Tutorial.view.UserCenterForm', {
 
                     // console.log(centersStore.get("id"));
 
-
+                    // Si no encuentra el index, da -1 i entonces filtered = true i no filtra
                     var filtered = selectedIds.indexOf(record.get('id')) === -1;
 
                     console.log("filtrar: ", filtered);
@@ -58,7 +56,7 @@ Ext.define('Tutorial.view.UserCenterForm', {
 
                 console.log("count: ", centersStore.getCount());
 
-                // Resfrescar el grid 1 (NO HACE FALTA?)
+                // Resfrescar el grid 1 (NO HACE FALTA?) // TODO: revisar
                 // var grid = Ext.getCmp('centersGrid');
                 // console.log("grid: ", grid);
                 // grid.getView().refresh();
@@ -77,9 +75,13 @@ Ext.define('Tutorial.view.UserCenterForm', {
 
             {
                 xtype: 'container',
-                // layout: 'hbox',
+                layout: 'hbox',
+                align: 'stretch',
                 // width: 900,
                 // height: 400,
+                defaults: {
+                    margin: 20
+                },
 
                 items: [
 
@@ -89,14 +91,17 @@ Ext.define('Tutorial.view.UserCenterForm', {
                         xtype: 'grid',
                         id: 'centersGrid',
                         title: 'Centros disponibles',
-                        height: 200,
-                        selModel: null, // de momento que no se seeleccione
+                        flex: 1,
+
+                        selModel: {
+                            type: 'checkboxmodel'
+                        },
 
                         columns: [
                             {
                                 text: 'ID Centro',
                                 dataIndex: 'id',
-                                flex: 1,
+                                width: 100,
                                 align: 'center',
 
                             },
@@ -113,10 +118,14 @@ Ext.define('Tutorial.view.UserCenterForm', {
                         listeners: {
                             itemdblclick: function (grid, record) {
 
+                                // deseleccionar primero
+                                var centersGrid = Ext.getCmp('centersGrid');
+                                centersGrid.getSelectionModel().deselect(record);
+
                                 // creamos un nuevo record para el grid 2 (como que son tablas difrentes se tiene que mapear un poco)
                                 var newRecord = Ext.create(userCentersStore.getModel(), {
                                     idCentro: record.get('id'),
-                                    userId: me.record.get('id') // el id del usuario actual
+                                    idUsuario: me.record.get('id') // el id del usuario actual
                                 });
 
                                 console.log("nuevo record a poner en grid 2: ", newRecord);
@@ -128,17 +137,133 @@ Ext.define('Tutorial.view.UserCenterForm', {
 
                     },
                     {
+                        xtype: 'container',
+                        width: 50,
+                        layout: {
+                            type: 'vbox',
+                            pack: 'center',
+                            align: 'center'
+                        },
+
+                        defaults: {
+                            margin: '20 0 0 0'
+                        },
+
+                        items: [
+
+                            {
+                                xtype: 'button',
+                                flex: 1,
+                                // text: 'ALL →',
+                                iconCls: 'fa fa-forward',
+                                margin: '40 0 0 0',
+                                handler: function () {
+
+                                    var centersGrid = Ext.getCmp('centersGrid');
+                                    centersGrid.getSelectionModel().deselectAll();
+
+                                    var arrayFilteredRecords = centersStore.getData().items
+
+                                    console.log("todos los filtrados a pasar: ", arrayFilteredRecords);
+
+                                    arrayFilteredRecords.forEach(filteredRecord => {
+
+                                        var newRecord = Ext.create(userCentersStore.getModel(), {
+                                            idCentro: filteredRecord.get('id'),
+                                            idUsuario: me.record.get('id') // el id del usuario actual
+                                        });
+
+                                        console.log("nuevo record a poner en grid 2: ", newRecord);
+
+                                        userCentersStore.add(newRecord);
+                                    });
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                flex: 1,
+                                iconCls: 'fa fa-play',
+                                // text: '→',
+
+                                handler: function () {
+
+                                    var centersGrid = Ext.getCmp('centersGrid');
+                                    // var usersCentersGrid = Ext.getCmp('usersCentersGrid');
+
+                                    var arraySelected = centersGrid.getSelectionModel().getSelection();
+
+                                    // Añadimos todos los seleccionados
+                                    arraySelected.forEach(selectedRecord => {
+
+                                        var newRecord = Ext.create(userCentersStore.getModel(), {
+                                            idCentro: selectedRecord.get('id'),
+                                            idUsuario: me.record.get('id') // el id del usuario actual
+                                        });
+
+                                        console.log("nuevo record a poner en grid 2: ", newRecord);
+
+                                        userCentersStore.add(newRecord);
+
+                                    });
+
+                                    centersGrid.getSelectionModel().deselectAll();
+                                    // usersCentersGrid.getSelectionModel().deselectAll(); // No hace falta?
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                flex: 1,
+                                // text: '←',
+                                iconCls: 'fa fa-play fa-flip-horizontal',
+                                handler: function () {
+
+                                    var usersCentersGrid = Ext.getCmp('usersCentersGrid');
+
+                                    var arraySelected = usersCentersGrid.getSelectionModel().getSelection();
+
+                                    // Eliminamos todos los seleccionados
+                                    arraySelected.forEach(selectedRecord => {
+
+                                        // Simplemente eliminar del segundo grid i el filter de antes se encarga de que vuelva a salir arriba
+                                        userCentersStore.remove(selectedRecord);
+                                    });
+
+                                    usersCentersGrid.getSelectionModel().deselectAll();
+                                }
+
+                            },
+                            {
+                                xtype: 'button',
+                                flex: 1,
+                                iconCls: 'fa fa-backward',
+                                // text: 'ALL ←',
+                                handler: function () {
+
+                                    // Simplemente quitar todos
+                                    var usersCentersGrid = Ext.getCmp('usersCentersGrid');
+                                    usersCentersGrid.getSelectionModel().deselectAll();
+                                    userCentersStore.removeAll();
+                                }
+
+                            }
+                        ]
+                    },
+                    {
                         store: userCentersStore,
                         xtype: 'grid',
-                        title: 'Centros assignados',
-                        height: 200,
-                        selModel: null, // de momento que no se seeleccione
+                        id: 'usersCentersGrid',
+                        title: 'Centros asignados',
+                        flex: 1,
+
+                        selModel: {
+                            type: 'checkboxmodel'
+                        },
 
                         columns: [
                             {
                                 text: 'ID Centro',
                                 dataIndex: 'idCentro',
-                                flex: 1,
+                                width: 100,
                                 align: 'center',
                             },
                             {
@@ -158,7 +283,11 @@ Ext.define('Tutorial.view.UserCenterForm', {
 
                         listeners: {
 
-                            itemdblclick: function(grid, record) {
+                            itemdblclick: function (grid, record) {
+
+                                // deseleccionar primero
+                                var usersCentersGrid = Ext.getCmp('usersCentersGrid');
+                                usersCentersGrid.getSelectionModel().deselect(record);
 
                                 // Simplemente eliminar del segundo grid i el filter de antes se encarga de que vuelva  a salir arriba
                                 userCentersStore.remove(record);
@@ -182,9 +311,60 @@ Ext.define('Tutorial.view.UserCenterForm', {
             {
                 text: 'Guardar',
                 iconCls: 'fa fa-save',
-                formBind: true, // Solo se habilita si el formulario es válido
                 handler: function () {
-                    me.saveCenter();
+
+                    console.log("toca guardar");
+
+
+                    // Eliminamos manualmente todos los centros del usuario actual
+                    Ext.Ajax.request({
+                        url: 'http://localhost:8080/api/usersCenters/' + me.record.get('id'),
+                        method: 'DELETE',
+
+                        success: function (response) {
+
+                            // Añadimos todos los centros que tenemos asignados al usuario
+                            var arrayAllCenters = userCentersStore.getData().items
+                            if (arrayAllCenters.length != 0) {
+
+                                arrayAllCenters.forEach(record => {
+
+                                    Ext.Ajax.request({
+                                        url: 'http://localhost:8080/api/usersCenters',
+                                        method: 'POST',
+                                        jsonData: {
+                                            idUsuario: me.record.get('id'),
+                                            idCentro: record.get('idCentro')
+                                        },
+                                        success: function (response) {
+                                            Ext.Msg.alert('Éxito', 'Se han actualizado los centros del usuario.');
+                                            me.close();
+                                        },
+                                        failure: function (response) {
+                                            Ext.Msg.alert('Error', 'No se ha podido actualizar los centros del usuario.');
+                                        }
+                                    });
+                                });
+
+                            } else {
+                                Ext.Msg.alert('Éxito', 'Se han eliminado los centros del usuario.');
+                                me.close();
+                            }
+                        },
+                        failure: function (response) {
+                            Ext.Msg.alert('Error', 'No se ha podido actualizar los centros del usuario.');
+                        }
+                    });
+
+                    // userCentersStore.sync({
+                    //     success: function (batch, options) {
+
+                    //         console.log('sync correcto');
+                    //     },
+                    //     failure: function (batch, options) {
+                    //         console.log('sync incorrecto');
+                    //     }
+                    // });
                 }
             }
         ];
