@@ -324,26 +324,26 @@ Ext.define('Tutorial.view.UserCenterForm', {
                         success: function (response) {
 
                             // Añadimos todos los centros que tenemos asignados al usuario
-                            var arrayAllCenters = userCentersStore.getData().items
-                            if (arrayAllCenters.length != 0) {
+                            if (userCentersStore.getCount() != 0) {
 
-                                arrayAllCenters.forEach(record => {
+                                var items = [];
 
-                                    Ext.Ajax.request({
-                                        url: 'http://localhost:8080/api/usersCenters',
-                                        method: 'POST',
-                                        jsonData: {
-                                            idUsuario: me.record.get('id'),
-                                            idCentro: record.get('idCentro')
-                                        },
-                                        success: function (response) {
-                                            Ext.Msg.alert('Éxito', 'Se han actualizado los centros del usuario.');
-                                            me.close();
-                                        },
-                                        failure: function (response) {
-                                            Ext.Msg.alert('Error', 'No se ha podido actualizar los centros del usuario.');
-                                        }
-                                    });
+                                userCentersStore.each(function (record) {
+                                    items.push(record.getData());
+                                });
+
+                                Ext.Ajax.request({
+                                    url: 'http://localhost:8080/api/usersCenters/createAll',
+                                    method: 'POST',
+                                    jsonData: items,
+                                    
+                                    success: function (response) {
+                                        Ext.Msg.alert('Éxito', 'Se han actualizado los centros del usuario.');
+                                        me.close();
+                                    },
+                                    failure: function (response) {
+                                        Ext.Msg.alert('Error', 'No se ha podido actualizar los centros del usuario.');
+                                    }
                                 });
 
                             } else {
@@ -375,106 +375,4 @@ Ext.define('Tutorial.view.UserCenterForm', {
         // var form = me.down('form').getForm();
         // form.loadRecord(me.record);
     },
-
-    // /**
-    //  * Método para guardar el centro
-    //  * Hace una llamada POST (crear) o PUT (actualizar)
-    //  */
-    // saveCenter: function () {
-    //     var me = this,
-    //         form = me.down('form').getForm();
-
-    //     // Validar el formulario
-    //     if (!form.isValid()) {
-    //         Ext.Msg.alert('Validación', 'Por favor complete todos los campos correctamente');
-    //         return;
-    //     }
-
-    //     // Obtener los valores del formulario
-    //     var values = form.getValues();
-
-    //     // Mostrar loading
-    //     me.setLoading('Guardando...');
-
-    //     if (me.isEdit) {
-    //         // ACTUALIZAR centro existente (PUT)
-    //         me.updateCenter(values);
-    //     } else {
-    //         // CREAR nuevo centro (POST)
-    //         me.createCenter(values);
-    //     }
-    // },
-
-    // /**
-    //  * CREAR - Método POST
-    //  * Crea un nuevo centro en el servidor
-    //  */
-    // createCenter: function (values) {
-    //     var me = this;
-
-    //     console.log('📤 POST - Creando nuevo centro:', values);
-
-    //     // Hacer la petición POST
-    //     Ext.Ajax.request({
-    //         url: 'http://localhost:8080/api/centers',
-    //         method: 'POST',
-    //         jsonData: values,
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         success: function (response) {
-    //             var result = Ext.decode(response.responseText);
-    //             console.log('✅ Centro creado exitosamente:', result);
-
-    //             me.setLoading(false);
-    //             Ext.Msg.alert('Éxito', 'Centro creado correctamente', function () {
-    //                 // Recargar el grid
-    //                 me.fireEvent('centersaved');
-    //                 me.close();
-    //             });
-    //         },
-    //         failure: function (response) {
-    //             console.error('❌ Error al crear centro:', response);
-    //             me.setLoading(false);
-    //             Ext.Msg.alert('Error', 'No se pudo crear el centro: ' + response.statusText);
-    //         }
-    //     });
-    // },
-
-    // /**
-    //  * ACTUALIZAR - Método PUT
-    //  * Actualiza un centro existente en el servidor
-    //  */
-    // updateCenter: function (values) {
-    //     var me = this,
-    //         id = me.record.get('id');
-
-    //     console.log('📤 PUT - Actualizando centro ID:', id, values);
-
-    //     // Hacer la petición PUT
-    //     Ext.Ajax.request({
-    //         url: 'http://localhost:8080/api/centers/' + id,
-    //         method: 'PUT',
-    //         jsonData: values,
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         success: function (response) {
-    //             var result = Ext.decode(response.responseText);
-    //             console.log('✅ Centro actualizado exitosamente:', result);
-
-    //             me.setLoading(false);
-    //             Ext.Msg.alert('Éxito', 'Centro actualizado correctamente', function () {
-    //                 // Recargar el grid
-    //                 me.fireEvent('centersaved');
-    //                 me.close();
-    //             });
-    //         },
-    //         failure: function (response) {
-    //             console.error('❌ Error al actualizar centro:', response);
-    //             me.setLoading(false);
-    //             Ext.Msg.alert('Error', 'No se pudo actualizar el centro: ' + response.statusText);
-    //         }
-    //     });
-    // }
 });

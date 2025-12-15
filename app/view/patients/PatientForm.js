@@ -1,0 +1,250 @@
+Ext.define('Tutorial.view.PatientForm', {
+    extend: 'Ext.container.Container',
+
+    alias: 'widget.patientform',
+
+    title: 'Crear Paciente',
+
+    items: [
+
+        {
+            xtype: 'panel',
+            title: 'Ficha del Paciente',
+            
+            collapsible: true,
+            collapsed: true,
+
+            // layout: table
+            items: [
+
+                {
+                    title: 'Demográficos',
+                    xtype: 'panel'
+                },
+                {
+                    title: 'Datos de contacto',
+                    xtype: 'panel'
+                },
+                {
+                    title: 'Otros datos de contacto',
+                    xtype: 'panel'
+                }
+            ]
+        },
+
+        {
+            xtype: 'panel',
+            title: 'Ficha médica',
+            
+            collapsible: true,
+            collapsed: true,
+
+            // layout: table
+            items: [
+
+                {
+                    xtype: 'panel',
+                    title: 'Datos médicos'
+                    
+                },
+                {
+                    xtype: 'panel',
+                    title: 'Diagnósticos'
+                },
+                {
+                    xtype: 'panel',
+                    title: 'Comentarios del paciente'
+                }
+            ]
+        }
+
+    ]
+
+    // // Configuración de la ventana
+    // 
+    // modal: true,
+    // width: 400,
+    // layout: 'fit',
+
+    // // Iconos
+    // iconCls: 'fa fa-user',
+
+    // // Variables para saber si estamos editando o creando
+    // isEdit: false,
+    // record: null,
+
+    // /**
+    //  * Inicialización del componente
+    //  */
+    // initComponent: function () {
+    //     var me = this;
+
+    //     // Si estamos editando, cambiar el título
+    //     if (me.isEdit) {
+    //         me.title = 'Editar Centro';
+    //     }
+
+    //     // Definir los items (el formulario)
+    //     me.items = [{
+    //         xtype: 'form',
+    //         reference: 'centerForm',
+    //         bodyPadding: 20,
+    //         defaults: {
+    //             xtype: 'textfield',
+    //             anchor: '100%',
+    //             labelWidth: 80,
+    //             margin: '0 0 15 0'
+    //         },
+    //         items: [
+    //             {
+    //                 xtype: 'displayfield',
+    //                 fieldLabel: 'ID',
+    //                 name: 'id',
+    //                 hidden: !me.isEdit,
+    //                 value: me.record ? me.record.get('id') : ''
+    //             },
+    //             {
+    //                 fieldLabel: 'Nombre',
+    //                 name: 'nombre',
+    //                 allowBlank: false,
+    //                 blankText: 'El nombre es obligatorio',
+    //                 emptyText: 'Ingrese el nombre completo'
+    //             },
+    //             {
+    //                 fieldLabel: 'Descripción',
+    //                 name: 'descripcion',
+    //                 allowBlank: true,
+    //             }
+    //         ]
+    //     }];
+
+    //     // Botones de acción
+    //     me.buttons = [
+    //         {
+    //             text: 'Cancelar',
+    //             iconCls: 'fa fa-times',
+    //             handler: function () {
+    //                 me.close();
+    //             }
+    //         },
+    //         {
+    //             text: 'Guardar',
+    //             iconCls: 'fa fa-save',
+    //             formBind: true, // Solo se habilita si el formulario es válido
+    //             handler: function () {
+    //                 me.saveCenter();
+    //             }
+    //         }
+    //     ];
+
+    //     me.callParent(arguments);
+
+    //     // Si estamos editando, cargar los datos en el formulario
+    //     if (me.isEdit && me.record) {
+    //         var form = me.down('form').getForm();
+    //         form.loadRecord(me.record);
+    //     }
+    // },
+
+    // /**
+    //  * Método para guardar el centro
+    //  * Hace una llamada POST (crear) o PUT (actualizar)
+    //  */
+    // saveCenter: function () {
+    //     var me = this,
+    //         form = me.down('form').getForm();
+
+    //     // Validar el formulario
+    //     if (!form.isValid()) {
+    //         Ext.Msg.alert('Validación', 'Por favor complete todos los campos correctamente');
+    //         return;
+    //     }
+
+    //     // Obtener los valores del formulario
+    //     var values = form.getValues();
+
+    //     // Mostrar loading
+    //     me.setLoading('Guardando...');
+
+    //     if (me.isEdit) {
+    //         // ACTUALIZAR centro existente (PUT)
+    //         me.updateCenter(values);
+    //     } else {
+    //         // CREAR nuevo centro (POST)
+    //         me.createCenter(values);
+    //     }
+    // },
+
+    // /**
+    //  * CREAR - Método POST
+    //  * Crea un nuevo centro en el servidor
+    //  */
+    // createCenter: function (values) {
+    //     var me = this;
+
+    //     console.log('📤 POST - Creando nuevo centro:', values);
+
+    //     // Hacer la petición POST
+    //     Ext.Ajax.request({
+    //         url: 'http://localhost:8080/api/centers',
+    //         method: 'POST',
+    //         jsonData: values,
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         success: function (response) {
+    //             var result = Ext.decode(response.responseText);
+    //             console.log('✅ Centro creado exitosamente:', result);
+
+    //             me.setLoading(false);
+    //             Ext.Msg.alert('Éxito', 'Centro creado correctamente', function () {
+    //                 // Recargar el grid
+    //                 me.fireEvent('centersaved');
+    //                 me.close();
+    //             });
+    //         },
+    //         failure: function (response) {
+    //             console.error('❌ Error al crear centro:', response);
+    //             me.setLoading(false);
+    //             Ext.Msg.alert('Error', 'No se pudo crear el centro: ' + response.statusText);
+    //         }
+    //     });
+    // },
+
+    // /**
+    //  * ACTUALIZAR - Método PUT
+    //  * Actualiza un centro existente en el servidor
+    //  */
+    // updateCenter: function (values) {
+    //     var me = this,
+    //         id = me.record.get('id');
+
+    //     console.log('📤 PUT - Actualizando centro ID:', id, values);
+
+    //     // Hacer la petición PUT
+    //     Ext.Ajax.request({
+    //         url: 'http://localhost:8080/api/centers/' + id,
+    //         method: 'PUT',
+    //         jsonData: values,
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         success: function (response) {
+    //             var result = Ext.decode(response.responseText);
+    //             console.log('✅ Centro actualizado exitosamente:', result);
+
+    //             me.setLoading(false);
+    //             Ext.Msg.alert('Éxito', 'Centro actualizado correctamente', function () {
+    //                 // Recargar el grid
+    //                 me.fireEvent('centersaved');
+    //                 me.close();
+    //             });
+    //         },
+    //         failure: function (response) {
+    //             console.error('❌ Error al actualizar centro:', response);
+    //             me.setLoading(false);
+    //             Ext.Msg.alert('Error', 'No se pudo actualizar el centro: ' + response.statusText);
+    //         }
+    //     });
+    // }
+});

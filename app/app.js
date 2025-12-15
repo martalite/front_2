@@ -10,7 +10,7 @@
  */
 
 if (!localStorage.getItem("loggedIn")) {
-    
+
     window.location = '../../';
 }
 
@@ -103,6 +103,36 @@ Ext.onReady(function () {
                                             Ext.getCmp('panelGrids').add(Ext.create({
                                                 xtype: 'centergrid'
                                             }));
+                                        }
+                                    },
+                                    {
+                                        text: "Pacientes",
+                                        menu: {
+                                            xtype: 'menu',
+                                            plain: true,
+                                            items: [
+
+                                                {
+                                                    text: 'Búsqueda y modificación',
+                                                    handler: function () {
+
+                                                        Ext.getCmp('panelGrids').removeAll(true, true);
+                                                        Ext.getCmp('panelGrids').add(Ext.create({
+                                                            xtype: 'patientgrid'
+                                                        }));
+                                                    }
+                                                },
+                                                {
+                                                    text: 'Creación',
+                                                    handler: function () {
+
+                                                        Ext.getCmp('panelGrids').removeAll(true, true);
+                                                        Ext.getCmp('panelGrids').add(Ext.create({
+                                                            xtype: 'patientform'
+                                                        }));
+                                                    }
+                                                }
+                                            ]
                                         }
                                     }
                                 ]
