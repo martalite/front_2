@@ -14,6 +14,91 @@ Ext.define('Tutorial.view.PatientGrid', {
         type: 'patients'
     },
 
+    // plugins: ['gridfilters'],
+    // filterable: true,
+    // features: [filters],
+    autoScroll: true,
+
+    // docked items para los filtros del grid
+    dockedItems: [{
+        xtype: 'form',
+        dock: 'top',
+        bodyPadding: 5,
+        collapsible: true,
+        title: 'Filtros',
+        layout: 'hbox',
+        margin: 10,
+
+        defaults: {
+            margin: '0 15 0 0',
+            labelAlign: 'left'
+        },
+
+        name: 'filtersGrid',
+
+        items: [
+            {
+                xtype: 'textfield',
+                name: 'nombre',
+                fieldLabel: 'Nombre',
+                flex: 0.5
+            },
+            {
+                xtype: 'textfield',
+                name: 'descripcion',
+                fieldLabel: 'Descripción',
+                flex: 1
+            },
+            {
+                xtype: 'numberfield',
+                name: 'numeroCorto',
+                fieldLabel: 'Número corto',
+                flex: 0.5
+            }
+
+        ]
+    }],
+
+    // Barra de herramientas superior
+    tbar: [
+        {
+            xtype: 'button',
+            text: 'Buscar',
+            iconCls: 'fa fa-search',
+            handler: function () {
+
+                // pillar values
+                var values = Ext.ComponentQuery.query('[name=filtersGrid]')[0].getValues();
+
+                console.log(values);
+                
+                var store = Ext.ComponentQuery.query('patientgrid')[0].getStore();
+
+                // añadir filtros (mantener otras cosas)
+                Ext.apply(store.getProxy().extraParams, values);
+
+                // cargar la pmirera página del store
+                store.loadPage(1);
+            }
+        },
+        {
+            xtype: 'button',
+            text: 'Limpiar',
+            iconCls: 'fa fa-eraser',
+            handler: function (btn) {
+
+                var grid = btn.up('patientgrid');
+                var store = grid.getStore();
+
+                btn.up('form').reset();
+
+                // machacar los filtros i demás
+                store.getProxy().extraParams = {};
+                store.loadPage(1);
+            }
+        }
+    ],
+
     // Columnas del grid
     columns: [
         {
@@ -33,14 +118,31 @@ Ext.define('Tutorial.view.PatientGrid', {
             // Ordenable
             sortable: true,
             // Renderizador con icono
-            renderer: function (value) {
-                return '<i class="fa fa-user"></i> ' + value;
+            // renderer: function (value) {
+            //     return '<i class="fa fa-user"></i> ' + value;
+            // },
+            filter: {
+                type: 'string'
             }
         },
         {
-            text: 'Código corto',
-            dataIndex: 'codigoCorto',
-            flex: 1
+            text: 'Descripción',
+            dataIndex: 'descripcion',
+            flex: 1,
+            // Ordenable
+            sortable: true,
+            // Renderizador con icono
+            // renderer: function (value) {
+            //     return '<i class="fa fa-user"></i> ' + value;
+            // },
+            filter: {
+                type: 'string'
+            }
+        },
+        {
+            text: 'Número corto',
+            dataIndex: 'numeroCorto',
+            flex: 0.5
         },
         {
             text: 'Acciones',
@@ -66,35 +168,6 @@ Ext.define('Tutorial.view.PatientGrid', {
         }
     ],
 
-    // Barra de herramientas superior
-    tbar: [
-        // {
-        //     text: 'Nuevo Paciente',
-        //     iconCls: 'fa fa-plus',
-        //     handler: 'onNewPatient',
-        //     // Estilo del botón
-        //     ui: 'default',
-        //     scale: 'medium'
-        // },
-        // '-', // Separador
-        {
-            text: 'Recargar',
-            iconCls: 'fa fa-refresh',
-            handler: 'onReload',
-            scale: 'medium'
-        },
-        '->',  // Empuja los siguientes items a la derecha
-        {
-            xtype: 'textfield',
-            reference: 'searchField',
-            emptyText: 'Buscar...',
-            width: 200,
-            enableKeyEvents: true,
-            listeners: {
-                keyup: 'onSearch'
-            }
-        }
-    ],
 
     // Barra de paginación inferior
     bbar: {
@@ -113,21 +186,21 @@ Ext.define('Tutorial.view.PatientGrid', {
     // Controller con los métodos de acción
     controller: {
 
-        /**
-         * CREAR - Abrir formulario para nuevo paciente
-         */
-        onNewPatient: function () {
-            console.log('➕ Abriendo formulario para nuevo paciente');
+        // /**
+        //  * CREAR - Abrir formulario para nuevo paciente
+        //  */
+        // onNewPatient: function () {
+        //     console.log('➕ Abriendo formulario para nuevo paciente');
 
-            var form = Ext.create('Tutorial.view.PatientForm', {
-                isEdit: false
-            });
+        //     var form = Ext.create('Tutorial.view.PatientForm', {
+        //         isEdit: false
+        //     });
 
-            // Escuchar el evento de guardado
-            form.on('patientsaved', this.onReload, this);
+        //     // Escuchar el evento de guardado
+        //     form.on('patientsaved', this.onReload, this);
 
-            form.show();
-        },
+        //     form.show();
+        // },
 
         /**
          * ACTUALIZAR - Abrir formulario para editar paciente

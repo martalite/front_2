@@ -5,56 +5,333 @@ Ext.define('Tutorial.view.PatientForm', {
 
     title: 'Crear Paciente',
 
+    scrollable: true,
+
     items: [
 
         {
             xtype: 'panel',
             title: 'Ficha del Paciente',
-            
+            margin: 10,
+            bodyPadding: 10,
+
+            bodyStyle: {
+
+                backgroundColor: '#F9F9F9'
+            },
+
+            border: true,
+
             collapsible: true,
             collapsed: true,
 
-            // layout: table
+            layout: {
+                type: 'hbox'
+            },
+
             items: [
 
                 {
                     title: 'Demográficos',
-                    xtype: 'panel'
+                    xtype: 'form',
+                    collapsible: true,
+                    collapsed: true,
+                    bodyPadding: 10,
+                    flex: 1,
+
+                    margin: 2,
+
+                    // header: {
+                    //     style: {
+                    //         backgroundColor: '#ebebebff',
+                    //         color: 'blue'
+                    //     },
+                    // },
+
+                    // bodyStyle: {
+                    //     backgroundColor: '#ebebebff',
+                    // },
+
+                    style: {
+                        border: '2px solid #cbcbcbff',
+                        borderRadius: '2px',
+                    },
+
+                    // TODO: mirar que layout utilizar
+
+                    items: [
+
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+
+                    ]
                 },
                 {
-                    title: 'Datos de contacto',
-                    xtype: 'panel'
+                    xtype: 'container',
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch',
+                    },
+
+                    flex: 1,
+
+                    items: [
+                        {
+                            title: 'Otros datos de contacto',
+                            xtype: 'form',
+                            collapsible: true,
+                            collapsed: true,
+                            bodyPadding: 10,
+                            felx: 1,
+                            margin: 2,
+
+                            // header: {
+                            //     style: {
+                            //         backgroundColor: '#ebebebff',
+                            //         color: 'blue'
+                            //     },
+                            // },
+
+                            // bodyStyle: {
+                            //     backgroundColor: '#ebebebff',
+                            // },
+
+                            style: {
+                                border: '2px solid #cbcbcbff',
+                                borderRadius: '2px',
+                            },
+
+                            items: [
+
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                }
+
+                            ]
+
+                        },
+                        {
+                            title: 'Datos de contacto',
+                            xtype: 'form',
+                            collapsible: true,
+                            collapsed: true,
+                            bodyPadding: 10,
+                            flex: 1,
+                            margin: 2,
+
+                            // header: {
+                            //     style: {
+                            //         backgroundColor: '#ebebebff',
+                            //         color: 'blue'
+                            //     },
+                            // },
+
+                            // bodyStyle: {
+                            //     backgroundColor: '#ebebebff',
+                            // },
+
+                            style: {
+                                border: '2px solid #cbcbcbff',
+                                borderRadius: '2px',
+                            },
+
+                            items: [
+
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+
+                            ]
+                        }
+                    ]
                 },
-                {
-                    title: 'Otros datos de contacto',
-                    xtype: 'panel'
-                }
+
             ]
         },
 
         {
             xtype: 'panel',
             title: 'Ficha médica',
-            
+
+            margin: 10,
+            bodyPadding: 10,
+
+            bodyStyle: {
+
+                backgroundColor: '#F9F9F9'
+            },
+
+            border: true,
+
             collapsible: true,
             collapsed: true,
 
-            // layout: table
-            items: [
+            layout: {
+                type: 'hbox'
+            },
 
+            items: [
                 {
-                    xtype: 'panel',
-                    title: 'Datos médicos'
-                    
+                    xtype: 'form',
+                    title: 'Datos médicos',
+                    // collapsible: true,
+                    // collapsed: false,
+                    bodyPadding: 10,
+                    flex: 1,
+                    margin: 2,
+
+                    // header: {
+                    //     style: {
+                    //         backgroundColor: '#ebebebff',
+                    //         color: 'blue'
+                    //     },
+                    // },
+
+                    // bodyStyle: {
+                    //     backgroundColor: '#ebebebff',
+                    // },
+
+                    style: {
+                        border: '2px solid #cbcbcbff',
+                        borderRadius: '2px',
+                    },
+
+                    items: [
+
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+                        {
+                            xtype: 'textfield',
+                            emptyText: 'Dummy'
+                        },
+
+                    ]
                 },
                 {
-                    xtype: 'panel',
-                    title: 'Diagnósticos'
+                    xtype: 'container',
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch',
+                    },
+                    flex: 1,
+
+                    items: [
+                        {
+                            xtype: 'form',
+                            title: 'Diagnósticos',
+                            collapsible: true,
+                            collapsed: true,
+                            bodyPadding: 10,
+                            felx: 1,
+                            margin: 2,
+
+                            // header: {
+                            //     style: {
+                            //         backgroundColor: '#ebebebff',
+                            //         color: 'blue'
+                            //     },
+                            // },
+
+                            // bodyStyle: {
+                            //     backgroundColor: '#ebebebff',
+                            // },
+
+                            style: {
+                                border: '2px solid #cbcbcbff',
+                                borderRadius: '2px',
+                            },
+
+                            items: [
+
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+
+                            ]
+                        },
+                        {
+                            xtype: 'form',
+                            title: 'Comentarios del paciente',
+                            collapsible: true,
+                            collapsed: true,
+                            bodyPadding: 10,
+                            flex: 1,
+                            margin: 2,
+
+                            // header: {
+                            //     style: {
+                            //         backgroundColor: '#ebebebff',
+                            //         color: 'blue'
+                            //     },
+                            // },
+
+                            // bodyStyle: {
+                            //     backgroundColor: '#ebebebff',
+                            // },
+
+                            style: {
+                                border: '2px solid #cbcbcbff',
+                                borderRadius: '2px',
+                            },
+
+                            items: [
+
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    emptyText: 'Dummy'
+                                },
+
+                            ]
+                        }
+                    ]
                 },
-                {
-                    xtype: 'panel',
-                    title: 'Comentarios del paciente'
-                }
             ]
         }
 
