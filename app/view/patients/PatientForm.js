@@ -1,5 +1,5 @@
 Ext.define('Tutorial.view.PatientForm', {
-    extend: 'Ext.container.Container',
+    extend: 'Ext.panel.Panel',
 
     alias: 'widget.patientform',
 
@@ -53,7 +53,19 @@ Ext.define('Tutorial.view.PatientForm', {
                         },
 
                         // Añadir el resumen en colapsar
-                        collapse: function (panel) {
+                        beforeCollapse: function (panel) {
+
+                            // var me = this;
+
+                            // tiene que estar arriba aqui
+                            // me.callParent();
+
+                            // var contFichaPaciente = Ext.ComponentQuery.query('[name=containerFichaPaciente]')[0];
+
+                            var values = Ext.ComponentQuery.query('[name=panelFichaPaciente]')[0].down('form').getForm().getValues();
+
+                            console.log(values);
+                            
 
                             panel.up('container').add(
                                 {
@@ -77,22 +89,66 @@ Ext.define('Tutorial.view.PatientForm', {
                                     items: [
                                         {
                                             xtype: 'displayfield',
-                                            fieldLabel: 'Dummy',
-                                            value: 'Dummy'
+                                            fieldLabel: 'Nombre',
+                                            value: values.nombre
                                         },
                                         {
                                             xtype: 'displayfield',
-                                            fieldLabel: 'Dummy',
-                                            value: 'Dummy'
+                                            fieldLabel: 'Primer apellido',
+                                            value: values.apellido1
                                         },
                                         {
                                             xtype: 'displayfield',
-                                            fieldLabel: 'Dummy',
-                                            value: 'Dummy'
+                                            fieldLabel: 'Segundo apellido',
+                                            value: values.apellido2
+                                        },
+                                        {
+                                            xtype: 'displayfield',
+                                            fieldLabel: 'DNI',
+                                            value: values.dni
                                         }
                                     ]
                                 }
                             )
+
+                            // panel.up('container').add(
+                            //     {
+                            //         xtype: 'panel',
+                            //         bodyPadding: 5,
+                            //         layout: 'hbox',
+                            //         margin: '-10 10 0 10',
+                            //         bodyStyle: {
+
+                            //             backgroundColor: '#F9F9F9'
+                            //         },
+                            //         border: true,
+
+                            //         defaults: {
+                            //             margin: '0 5 0 0',
+                            //             // labelAlign: 'center'
+                            //         },
+
+                            //         name: 'summaryFichaPaciente',
+
+                            //         items: [
+                            //             {
+                            //                 xtype: 'displayfield',
+                            //                 fieldLabel: 'Dummy',
+                            //                 value: 'Dummy'
+                            //             },
+                            //             {
+                            //                 xtype: 'displayfield',
+                            //                 fieldLabel: 'Dummy',
+                            //                 value: 'Dummy'
+                            //             },
+                            //             {
+                            //                 xtype: 'displayfield',
+                            //                 fieldLabel: 'Dummy',
+                            //                 value: 'Dummy'
+                            //             }
+                            //         ]
+                            //     }
+                            // )
                         }
                     },
 
@@ -145,7 +201,6 @@ Ext.define('Tutorial.view.PatientForm', {
                                     flex: 1,
 
                                     items: [
-
                                         {
                                             xtype: 'textfield',
                                             emptyText: 'Dummy'
@@ -157,6 +212,16 @@ Ext.define('Tutorial.view.PatientForm', {
                                         {
                                             xtype: 'textfield',
                                             emptyText: 'Dummy'
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            emptyText: 'Nombre',
+                                            name: 'nombre'
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            emptyText: 'Segundo apellido',
+                                            name: 'apellido2'
                                         }
                                     ]
                                 },
@@ -180,9 +245,51 @@ Ext.define('Tutorial.view.PatientForm', {
                                             emptyText: 'Dummy'
                                         },
                                         {
+                                            xtype: 'container',
+                                            layout: 'hbox',
+                                            margin: '0 0 10 0',
+                                            items: [
+                                                {
+                                                    xtype: 'textfield',
+                                                    emptyText: 'DNI',
+                                                    flex: 1,
+                                                    margin: '0 10 0 0',
+                                                    name: 'dni'
+                                                },
+                                                {
+                                                    xtype: 'textfield',
+                                                    emptyText: 'Dummy',
+                                                    flex: 2,
+                                                    margin: '0 0 0 10'
+                                                }
+                                            ]
+                                        },
+                                        {
                                             xtype: 'textfield',
-                                            emptyText: 'Dummy'
-                                        }
+                                            emptyText: 'Primer apellido',
+                                            name: 'apellido1'
+                                        },
+                                        {
+                                            xtype: 'container',
+                                            layout: 'hbox',
+                                            margin: '0 0 10 0',
+                                            items: [
+                                                {
+                                                    xtype: 'textfield',
+                                                    emptyText: 'Fecha de nacimiento',
+                                                    flex: 1,
+                                                    margin: '0 10 0 0',
+                                                    name: 'fechaDeNacimiento'
+                                                },
+                                                {
+                                                    xtype: 'textfield',
+                                                    emptyText: 'Sexo',
+                                                    flex: 1,
+                                                    margin: '0 0 0 10',
+                                                    name: 'sexo'
+                                                }
+                                            ]
+                                        },
                                     ]
 
                                 }
@@ -198,6 +305,49 @@ Ext.define('Tutorial.view.PatientForm', {
                             flex: 1,
 
                             items: [
+                                {
+                                    title: 'Datos de contacto',
+                                    xtype: 'form',
+                                    collapsible: true,
+                                    collapsed: true,
+                                    bodyPadding: 10,
+                                    flex: 1,
+                                    margin: 2,
+
+                                    // header: {
+                                    //     style: {
+                                    //         backgroundColor: '#ebebebff',
+                                    //         color: 'blue'
+                                    //     },
+                                    // },
+
+                                    // bodyStyle: {
+                                    //     backgroundColor: '#ebebebff',
+                                    // },
+
+                                    style: {
+                                        border: '2px solid #cbcbcbff',
+                                        borderRadius: '2px',
+                                    },
+
+                                    items: [
+
+                                        {
+                                            xtype: 'textfield',
+                                            emptyText: 'Número de teléfono',
+                                            name: 'numeroTelefono'
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            emptyText: 'Correo electrónico',
+                                            name: 'email'
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            emptyText: 'Dummy'
+                                        }
+                                    ]
+                                },
                                 {
                                     title: 'Otros datos de contacto',
                                     xtype: 'form',
@@ -232,36 +382,7 @@ Ext.define('Tutorial.view.PatientForm', {
                                         {
                                             xtype: 'textfield',
                                             emptyText: 'Dummy'
-                                        }
-                                    ]
-                                },
-                                {
-                                    title: 'Datos de contacto',
-                                    xtype: 'form',
-                                    collapsible: true,
-                                    collapsed: true,
-                                    bodyPadding: 10,
-                                    flex: 1,
-                                    margin: 2,
-
-                                    // header: {
-                                    //     style: {
-                                    //         backgroundColor: '#ebebebff',
-                                    //         color: 'blue'
-                                    //     },
-                                    // },
-
-                                    // bodyStyle: {
-                                    //     backgroundColor: '#ebebebff',
-                                    // },
-
-                                    style: {
-                                        border: '2px solid #cbcbcbff',
-                                        borderRadius: '2px',
-                                    },
-
-                                    items: [
-
+                                        },
                                         {
                                             xtype: 'textfield',
                                             emptyText: 'Dummy'
@@ -309,6 +430,18 @@ Ext.define('Tutorial.view.PatientForm', {
                         type: 'hbox'
                     },
 
+                    // header: {
+                    //     items: [
+
+                    //         {
+                    //             xtype: 'checkbox',
+                    //             cls: 'title-checkbox',
+                    //             width: 40,
+                    //             // height: 10 
+                    //         }
+                    //     ]
+                    // },
+
                     items: [
                         {
                             xtype: 'form',
@@ -339,7 +472,8 @@ Ext.define('Tutorial.view.PatientForm', {
 
                                 {
                                     xtype: 'textfield',
-                                    emptyText: 'Dummy'
+                                    emptyText: 'Color de ficha',
+                                    name: 'colorFichaMedica'
                                 },
                                 {
                                     xtype: 'textfield',
@@ -449,6 +583,25 @@ Ext.define('Tutorial.view.PatientForm', {
         }
     ],
 
+    bbar: [
+
+        {
+            text: 'Cancelar',
+            iconCls: 'fa fa-times',
+            handler: function () {
+                window.location = '/app';
+            }
+        },
+        {
+            text: 'Guardar',
+            iconCls: 'fa fa-save',
+            handler: function () {
+
+                console.log("toca guardar");
+            }
+        }
+    ],
+
     initComponent: function () {
 
         var me = this;
@@ -458,7 +611,12 @@ Ext.define('Tutorial.view.PatientForm', {
 
         var contFichaPaciente = Ext.ComponentQuery.query('[name=containerFichaPaciente]')[0];
 
-        console.log(contFichaPaciente);
+        var form = Ext.ComponentQuery.query('[name=panelFichaPaciente]')[0].down('form').getForm();
+        //contFichaPaciente.down('form')//.getValues();
+
+        // TODO: mirar de hacer check de si editar o crear
+
+        console.log(form);
 
         contFichaPaciente.add(
             {
@@ -482,18 +640,23 @@ Ext.define('Tutorial.view.PatientForm', {
                 items: [
                     {
                         xtype: 'displayfield',
-                        fieldLabel: 'Dummy',
-                        value: 'Dummy'
+                        fieldLabel: 'Nombre',
+                        value: 'a'//form.findField('nombre').getValue()
                     },
                     {
                         xtype: 'displayfield',
-                        fieldLabel: 'Dummy',
-                        value: 'Dummy'
+                        fieldLabel: 'Primer apellido',
+                        value: 'a'//form.findField('apellido1').getValue() 
                     },
                     {
                         xtype: 'displayfield',
-                        fieldLabel: 'Dummy',
-                        value: 'Dummy'
+                        fieldLabel: 'Segundo apellido',
+                        value: 'a'//form.findField('apellido2').getValue()
+                    },
+                    {
+                        xtype: 'displayfield',
+                        fieldLabel: 'DNI',
+                        value: 'a'//form.findField('dni').getValue()
                     }
                 ]
             }

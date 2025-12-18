@@ -15,27 +15,56 @@ Ext.define('Tutorial.model.Patient', {
         {
             name: 'nombre',
             type: 'string',
-            // Campo obligatorio
-            allowNull: false
+            allowNull: false // Campo obligatorio
         },
         {
-            name: 'descripcion',
+            name: 'apellido1',
             type: 'string',
-            allowNull: true
+            allowNull: false // Campo obligatorio
         },
         {
-            name: 'numeroCorto',
+            name: 'apellido2',
+            type: 'string',
+            allowNull: false // Campo obligatorio
+        },
+        {
+            name: 'fechaDenacimiento',
+            type: 'string',
+            allowNull: false // Campo obligatorio
+        },
+        {
+            name: 'sexo',
+            type: 'string',
+            allowNull: false // Campo obligatorio
+        },
+        {
+            name: 'dni',
+            type: 'string',
+            allowNull: false // Campo obligatorio
+        },
+        {
+            name: 'numeroTelefono',
             type: 'int',
-            allowNull: false
+            allowNull: false // Campo obligatorio
         },
         {
-            name: 'numeroLargo',
+            name: 'email',
+            type: 'string',
+            allowNull: false // Campo obligatorio
+        },
+        {
+            name: 'colorFichaMedica',
             type: 'string',
             allowNull: true
         },
         {
-            name: 'observaciones',
-            type: 'string',
+            name: 'diagnosticos',
+            type: 'auto',
+            allowNull: true
+        },
+        {
+            name: 'comentariosDePaciente',
+            type: 'auto',
             allowNull: true
         }
     ],
@@ -43,7 +72,7 @@ Ext.define('Tutorial.model.Patient', {
     // Validaciones (opcional pero recomendado)
     validators: {
         nombre: { type: 'presence', message: 'El nombre es obligatorio' },
-        numeroCorto: { type: 'presence', message: 'El número corto es obligatorio' },
-        numeroLargo: { type: 'presence', message: 'El número largo es obligatorio' },
+        // numeroCorto: { type: 'presence', message: 'El número corto es obligatorio' },
+        // numeroLargo: { type: 'presence', message: 'El número largo es obligatorio' },
     }
 });

@@ -41,21 +41,26 @@ Ext.define('Tutorial.view.PatientGrid', {
                 xtype: 'textfield',
                 name: 'nombre',
                 fieldLabel: 'Nombre',
-                flex: 0.5
-            },
-            {
-                xtype: 'textfield',
-                name: 'descripcion',
-                fieldLabel: 'Descripción',
                 flex: 1
             },
             {
-                xtype: 'numberfield',
-                name: 'numeroCorto',
-                fieldLabel: 'Número corto',
+                xtype: 'textfield',
+                name: 'apellido1',
+                fieldLabel: 'Primer apellido',
+                flex: 1
+            },
+            {
+                xtype: 'textfield',
+                name: 'apellido2',
+                fieldLabel: 'Segundo apellido',
+                flex: 1
+            },
+            {
+                xtype: 'textfield',
+                name: 'dni',
+                fieldLabel: 'DNI',
                 flex: 0.5
             }
-
         ]
     }],
 
@@ -114,34 +119,35 @@ Ext.define('Tutorial.view.PatientGrid', {
         {
             text: 'Nombre',
             dataIndex: 'nombre',
-            flex: 0.5,
-            // Ordenable
-            sortable: true,
-            // Renderizador con icono
-            // renderer: function (value) {
-            //     return '<i class="fa fa-user"></i> ' + value;
-            // },
-            filter: {
-                type: 'string'
-            }
-        },
-        {
-            text: 'Descripción',
-            dataIndex: 'descripcion',
             flex: 1,
             // Ordenable
             sortable: true,
-            // Renderizador con icono
-            // renderer: function (value) {
-            //     return '<i class="fa fa-user"></i> ' + value;
-            // },
             filter: {
                 type: 'string'
             }
         },
         {
-            text: 'Número corto',
-            dataIndex: 'numeroCorto',
+            text: 'Primer apellido',
+            dataIndex: 'apellido1',
+            flex: 1,
+            // Ordenable
+            // sortable: true,
+            // Renderizador con icono
+            // renderer: function (value) {
+            //     return '<i class="fa fa-user"></i> ' + value;
+            // },
+            // filter: {
+            //     type: 'string'
+            // }
+        },
+        {
+            text: 'Segundo apellido',
+            dataIndex: 'apellido2',
+            flex: 1
+        },
+        {
+            text: 'DNI',
+            dataIndex: 'dni',
             flex: 0.5
         },
         {
