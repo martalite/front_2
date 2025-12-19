@@ -5,6 +5,14 @@ Ext.define('Tutorial.view.PatientForm', {
 
     title: 'Crear Paciente',
 
+    // store: patients,
+
+    store: {
+        type: 'patients'
+    },
+
+    record: null,
+
     scrollable: true,
 
     items: [
@@ -65,7 +73,6 @@ Ext.define('Tutorial.view.PatientForm', {
                             var values = Ext.ComponentQuery.query('[name=panelFichaPaciente]')[0].down('form').getForm().getValues();
 
                             console.log(values);
-                            
 
                             panel.up('container').add(
                                 {
@@ -161,6 +168,7 @@ Ext.define('Tutorial.view.PatientForm', {
                         {
                             title: 'Demográficos',
                             xtype: 'form',
+                            name: 'formDemograficos',
                             collapsible: true,
                             collapsed: true,
                             bodyPadding: 10,
@@ -184,7 +192,6 @@ Ext.define('Tutorial.view.PatientForm', {
                                 borderRadius: '2px',
                             },
 
-                            // TODO: mirar que layout utilizar
                             // layout de dos columnas de hbox con vbox dentro con los fields
 
                             layout: 'hbox',
@@ -308,6 +315,7 @@ Ext.define('Tutorial.view.PatientForm', {
                                 {
                                     title: 'Datos de contacto',
                                     xtype: 'form',
+                                    name: 'formDatosDeContacto',
                                     collapsible: true,
                                     collapsed: true,
                                     bodyPadding: 10,
@@ -351,6 +359,7 @@ Ext.define('Tutorial.view.PatientForm', {
                                 {
                                     title: 'Otros datos de contacto',
                                     xtype: 'form',
+                                    name: 'formOtrosDatosDeContacto',
                                     collapsible: true,
                                     collapsed: true,
                                     bodyPadding: 10,
@@ -446,6 +455,7 @@ Ext.define('Tutorial.view.PatientForm', {
                         {
                             xtype: 'form',
                             title: 'Datos médicos',
+                            name: 'formDatosMedicos',
                             // collapsible: true,
                             // collapsed: false,
                             bodyPadding: 10,
@@ -502,6 +512,7 @@ Ext.define('Tutorial.view.PatientForm', {
                                 {
                                     xtype: 'form',
                                     title: 'Diagnósticos',
+                                    name: 'formDiagnosticos',
                                     collapsible: true,
                                     collapsed: true,
                                     bodyPadding: 10,
@@ -540,6 +551,7 @@ Ext.define('Tutorial.view.PatientForm', {
                                 {
                                     xtype: 'form',
                                     title: 'Comentarios del paciente',
+                                    name: 'formComentarios',
                                     collapsible: true,
                                     collapsed: true,
                                     bodyPadding: 10,
@@ -595,9 +607,97 @@ Ext.define('Tutorial.view.PatientForm', {
         {
             text: 'Guardar',
             iconCls: 'fa fa-save',
-            handler: function () {
+            handler: function (button) {
+
+                var me = button.up();
 
                 console.log("toca guardar");
+
+                // var formDemograficos = Ext.ComponentQuery.query('[name=panelFichaPaciente]')[0].down('form').getForm();
+                // console.log(formDemograficos);
+
+                // var formDatosDeContacto = Ext.ComponentQuery.query('[name=panelFichaPaciente]')[0].child('container').down('form')//.getForm();
+                // console.log(formDatosDeContacto);
+
+                // var formOtrosDatosDeContacto = formDatosDeContacto.getNextSibling();
+                // console.log(formOtrosDatosDeContacto);
+
+                // name: formOtrosDatosDeContacto,
+                // name: formDatosDeContacto,
+                // name: formDemograficos,
+                // name: 'formComentarios',
+                // name: 'formDiagnosticos',
+                // name: 'formDatosMedicos',
+
+                // pillar todos los forms
+                var demograficos = Ext.ComponentQuery.query('[name=formDemograficos]')[0];
+                var datosDeContacto = Ext.ComponentQuery.query('[name=formDatosDeContacto]')[0];
+                var otrosDatosDeContacto = Ext.ComponentQuery.query('[name=formOtrosDatosDeContacto]')[0];
+                var datosMedicos = Ext.ComponentQuery.query('[name=formDatosMedicos]')[0];
+                var diagnosticos = Ext.ComponentQuery.query('[name=formDiagnosticos]')[0];
+                var comentarios = Ext.ComponentQuery.query('[name=formComentarios]')[0];
+
+                // juntar datos
+                var allData = {
+                    ...demograficos.getValues(), ...datosDeContacto.getValues(), ...otrosDatosDeContacto.getValues(),
+                    ...datosMedicos.getValues(), ...diagnosticos.getValues(), ...comentarios.getValues()
+                };
+
+                console.log(allData);
+
+                // quitar dummy data de relleno
+                allData = {
+                    apellido1: allData.apellido1,
+                    apellido2: allData.apellido2,
+                    colorFichaMedica: allData.colorFichaMedica,
+                    dni: allData.dni,
+                    email: allData.email,
+                    fechaDeNacimiento: allData.fechaDeNacimiento,
+                    nombre: allData.nombre,
+                    numeroTelefono: allData.numeroTelefono,
+                    sexo: allData.sexo
+                };
+
+                console.log(allData);
+
+                // enviar a server en modo editar si hay record i si no en modo creaar
+                console.log("debugar esto record desde button: ", button.up().record);
+
+                if (me.record) {
+
+                    // Hacer put con id del record
+
+                } else {
+
+                    // Hacer post
+                    Ext.Ajax.request({
+                        url: 'http://localhost:8080/api/patients',
+                        method: 'POST',
+                        jsonData: allData,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        success: function (response) {
+                            var result = Ext.decode(response.responseText);
+                            console.log('✅ Paciente creado exitosamente:', result);
+
+                            me.setLoading(false);
+                            Ext.Msg.alert('Éxito', 'Paciente creado correctamente', function () {
+
+                                // hacer "que vuelva" (modificar xtype para cargar el grid de pacientes) 
+                                Ext.getCmp('panelGrids').removeAll(true, true);
+                                Ext.getCmp('panelGrids').add(Ext.create({
+                                    xtype: 'patientgrid'
+                                }));
+                            });
+                        },
+                        failure: function (response) {
+                            console.error('❌ Error al crear paciente:', response);
+                            me.setLoading(false);
+                            Ext.Msg.alert('Error', 'No se pudo crear el paciente: ' + response.statusText);
+                        }
+                    });
+                }
             }
         }
     ],
@@ -612,11 +712,18 @@ Ext.define('Tutorial.view.PatientForm', {
         var contFichaPaciente = Ext.ComponentQuery.query('[name=containerFichaPaciente]')[0];
 
         var form = Ext.ComponentQuery.query('[name=panelFichaPaciente]')[0].down('form').getForm();
-        //contFichaPaciente.down('form')//.getValues();
 
-        // TODO: mirar de hacer check de si editar o crear
+        // Si estamos editando, cargar los datos en el formulario
+        if (me.record) {
 
-        console.log(form);
+            // pillar todos los forms i cargar datos
+            Ext.ComponentQuery.query('[name=formDemograficos]')[0].getForm().loadRecord(me.record);
+            Ext.ComponentQuery.query('[name=formDatosDeContacto]')[0].getForm().loadRecord(me.record);
+            Ext.ComponentQuery.query('[name=formOtrosDatosDeContacto]')[0].getForm().loadRecord(me.record);
+            Ext.ComponentQuery.query('[name=formDatosMedicos]')[0].getForm().loadRecord(me.record);
+            Ext.ComponentQuery.query('[name=formDiagnosticos]')[0].getForm().loadRecord(me.record);
+            Ext.ComponentQuery.query('[name=formComentarios]')[0].getForm().loadRecord(me.record);
+        }
 
         contFichaPaciente.add(
             {
@@ -641,7 +748,7 @@ Ext.define('Tutorial.view.PatientForm', {
                     {
                         xtype: 'displayfield',
                         fieldLabel: 'Nombre',
-                        value: 'a'//form.findField('nombre').getValue()
+                        value: 'a'//form.findField('nombre').getValue() TODO: terminar
                     },
                     {
                         xtype: 'displayfield',

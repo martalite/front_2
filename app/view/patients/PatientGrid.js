@@ -76,7 +76,7 @@ Ext.define('Tutorial.view.PatientGrid', {
                 var values = Ext.ComponentQuery.query('[name=filtersGrid]')[0].getValues();
 
                 console.log(values);
-                
+
                 var store = Ext.ComponentQuery.query('patientgrid')[0].getStore();
 
                 // añadir filtros (mantener otras cosas)
@@ -188,6 +188,22 @@ Ext.define('Tutorial.view.PatientGrid', {
         // Se ejecuta cuando se hace doble clic en una fila
         itemdblclick: 'onEditPatient'
     },
+
+    initComponent: function () {
+
+        this.callParent();
+
+        // Añadir columna de colores
+
+        // obtener grid
+
+        // TODO: mirar de utilizar insertColumn() desde una referencia del grid y si no utilizar insert()
+
+        // hacer insert de cell en pos 0
+
+            // Hacer render custom para modificar el background color al de la data del record
+    },
+
 
     // Controller con los métodos de acción
     controller: {
